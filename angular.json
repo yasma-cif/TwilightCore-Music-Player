@@ -3,7 +3,8 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": ["angular-eslint", "playwright-ng-schematics"]
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -25,7 +26,7 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": ["src/styles.css", "./node_modules/@fortawesome/fontawesome-free/css/all.css"]
           },
           "configurations": {
             "production": {
@@ -59,12 +60,49 @@
             },
             "development": {
               "buildTarget": "TwilightCore-Music-Player:build:development"
+            },
+            "e2e": {
+              "buildTarget": "TwilightCore-Music-Player:build:development",
+              "port": 4201,
+              "liveReload": false
             }
           },
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "runnerConfig": true,
+            "setupFiles": ["src/setup-test.ts"],
+            "browsers": ["ChromiumHeadless"],
+            "reporters": ["default", "json"],
+            "outputFile": "test-results/vitest-results.json",
+            "coverageReporters": ["json-summary", "text", "html"],
+            "coverageExclude": [
+              "src/app/app.*.ts",
+              "src/app/models",
+              "src/app/**/*.routes.ts",
+              "src/**/i18n-*.ts"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": ["src/**/*.ts", "src/**/*.html", "e2e/**/*.ts"],
+            "maxWarnings": 0
+          }
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "TwilightCore-Music-Player:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "TwilightCore-Music-Player:serve:production"
+            }
+          }
         }
       }
     }
