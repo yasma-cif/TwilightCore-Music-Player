@@ -46,7 +46,7 @@ export default [
           'error',
           {
             type: 'element',
-            prefix: 'pr',
+            prefix: 'tw',
             style: 'kebab-case',
           },
         ],
@@ -54,7 +54,7 @@ export default [
           'error',
           {
             type: 'attribute',
-            prefix: 'pr',
+            prefix: 'tw',
             style: 'camelCase',
           },
         ],

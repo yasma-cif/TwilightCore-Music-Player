@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
+  selector: 'tw-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
