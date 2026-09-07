@@ -1,0 +1,25 @@
+<div class="player-controls">
+  <div class="player-controls-start">
+    <i class="fas fa-truck-arrow-right"></i>
+  </div>
+
+  <div class="player-controls-center">
+    <button (click)="playAudio()" style="background-color: red">
+      @if (isPlaying) {
+        <i class="fas fa-pause"></i>
+      } @else {
+        <i class="fas fa-play"></i>
+      }
+    </button>
+  </div>
+
+  <div class="player-controls-end">
+    <button (click)="decreaseSpeed()" style="background-color: red">
+      <i class="fas fa-minus"></i>
+    </button>
+    <button (click)="increaseSpeed()" style="background-color: red">
+      <i class="fas fa-plus"></i>
+    </button>
+    <p>Current playback rate: {{ playbackRate | number: '1.2' }}</p>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+.player-controls {
+  position: fixed;
+  background-color: aqua;
+  height: var(--player-controls-height);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.player-controls-start {
+  justify-self: start;
+  align-items: center;
+  display: flex;
+}
+
+.player-controls-center {
+  display: flex;
+  align-items: center;
+}
+
+.player-controls-end {
+  justify-self: end;
+  align-items: center;
+  display: flex;
+}
+
+.player-controls button {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.5rem;
+}

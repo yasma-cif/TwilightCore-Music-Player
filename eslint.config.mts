@@ -6,8 +6,6 @@ import eslint from '@eslint/js';
 import pluginVitest from '@vitest/eslint-plugin';
 // Allows us to bring in the recommended rules for Angular projects from angular-eslint
 import angular from 'angular-eslint';
-// Allows us to bring in the recommended rules for Prettier from eslint-plugin-prettier
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 // Import defineConfig from eslint
 import { defineConfig } from 'eslint/config';
 // Allows us to use the typed utility for our config, and to bring in the recommended rules for TypeScript projects from typescript-eslint
@@ -134,5 +132,4 @@ export default [
       ...tseslint.configs.disableTypeChecked,
     },
   ),
-  eslintPluginPrettierRecommended,
 ];

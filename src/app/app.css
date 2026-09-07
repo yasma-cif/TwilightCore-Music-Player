@@ -1,0 +1,5 @@
+.main {
+  padding-top: var(--top-bar-height);
+  padding-bottom: var(--player-controls-height);
+  font-size: 2rem;
+}

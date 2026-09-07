@@ -1,1 +1,13 @@
 @import url('tailwindcss');
+
+body {
+  background-color: black;
+  color: white;
+}
+
+/* Variables */
+
+:root {
+  --top-bar-height: 60px;
+  --player-controls-height: 60px;
+}

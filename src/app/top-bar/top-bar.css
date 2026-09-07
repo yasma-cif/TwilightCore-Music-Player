@@ -1,0 +1,25 @@
+.top-bar {
+  position: fixed;
+  background-color: aqua;
+  height: var(--top-bar-height);
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.top-bar-start {
+  justify-self: start;
+}
+
+.top-bar-center {
+  display: flex;
+}
+
+.top-bar-end {
+  justify-self: end;
+}
