@@ -1,0 +1,38 @@
+<div class="player-controls-bar">
+  <tw-playback-progress-bar />
+  <div class="player-controls">
+    <div class="player-controls-start">
+      <button matIconButton class="player-controls-button">
+        <i class="fas fa-bars"></i>
+      </button>
+      <button matIconButton class="player-controls-button">
+        <i class="fas fa-repeat"></i>
+      </button>
+      <button matIconButton class="player-controls-button">
+        <i class="fas fa-random"></i>
+      </button>
+    </div>
+
+    <div class="player-controls-center">
+      <button matIconButton class="player-controls-button">
+        <i class="fas fa-backward-step"></i>
+      </button>
+      <button matIconButton class="player-controls-button-play" (click)="playAudio()">
+        @if (isPlaying) {
+          <mat-icon class="fas fa-pause text-2xl" />
+        } @else {
+          <mat-icon class="fas fa-play text-2xl" />
+        }
+      </button>
+      <button matIconButton class="player-controls-button">
+        <i class="fas fa-forward-step"></i>
+      </button>
+    </div>
+
+    <div class="player-controls-end">
+      <button matIconButton class="player-controls-button">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </div>
+</div>

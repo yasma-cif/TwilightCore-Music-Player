@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Player } from './player-controls';
+import { PlayerControlsBar } from './player-controls-bar';
 
-describe('Player', () => {
-  let component: Player;
-  let fixture: ComponentFixture<Player>;
+describe('PlayerControlsBar', () => {
+  let component: PlayerControlsBar;
+  let fixture: ComponentFixture<PlayerControlsBar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Player],
+      imports: [PlayerControlsBar],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Player);
+    fixture = TestBed.createComponent(PlayerControlsBar);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -26,7 +26,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css", "./node_modules/@fortawesome/fontawesome-free/css/all.css"]
+            "styles": [
+              "src/material-theme.scss",
+              "src/styles.css",
+              "./node_modules/@fortawesome/fontawesome-free/css/all.css"
+            ]
           },
           "configurations": {
             "production": {

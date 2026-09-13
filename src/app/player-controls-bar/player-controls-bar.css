@@ -1,11 +1,14 @@
-.player-controls {
+.player-controls-bar {
   position: fixed;
-  background-color: aqua;
+  background-color: var(--mat-sys-secondary-container);
   height: var(--player-controls-height);
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1000;
+}
+
+.player-controls {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -16,24 +19,38 @@
   justify-self: start;
   align-items: center;
   display: flex;
+  gap: 0.5rem;
 }
 
 .player-controls-center {
-  display: flex;
   align-items: center;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .player-controls-end {
   justify-self: end;
   align-items: center;
   display: flex;
+  gap: 0.5rem;
 }
 
-.player-controls button {
+.player-controls-button {
   height: 40px;
   width: 40px;
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 0.5rem;
+}
+
+.player-controls-button-play {
+  height: 50px;
+  width: 50px;
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

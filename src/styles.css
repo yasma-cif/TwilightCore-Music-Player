@@ -1,8 +1,9 @@
 @import url('tailwindcss');
 
 body {
-  background-color: black;
-  color: white;
+  background-color: var(--mat-sys-surface-container-lowest);
+  color: var(--mat-sys-secondary);
+  line-height: 2.2rem;
 }
 
 /* Variables */

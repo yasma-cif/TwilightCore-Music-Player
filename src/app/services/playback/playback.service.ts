@@ -1,33 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { Service } from '@angular/core';
 
-@Component({
-  imports: [DecimalPipe],
-  selector: 'tw-player',
-  styleUrl: './player-controls.css',
-  templateUrl: './player-controls.html',
-})
-export class Player implements OnInit {
+@Service()
+export class PlaybackService {
   private readonly SONG = '/music/test2.mp3';
   protected _current_Audio: HTMLAudioElement;
 
   public constructor() {
     this._current_Audio = new Audio();
-  }
 
-  async ngOnInit() {
     this._current_Audio.src = this.SONG;
 
     this._current_Audio.preservesPitch = false;
     this._current_Audio.playbackRate = 1;
   }
 
-  protected get playbackRate(): number {
+  public get currentAudio() {
+    return this._current_Audio;
+  }
+
+  public get playbackRate(): number {
     return this._current_Audio.playbackRate;
   }
 
-  protected get isPlaying(): boolean {
+  public get isPlaying(): boolean {
     return !this._current_Audio.paused;
+  }
+
+  public get duration(): number {
+    return this._current_Audio.duration;
+  }
+
+  public get progressPercentage(): number {
+    return (this._current_Audio.currentTime / this._current_Audio.duration) * 100;
   }
 
   public async playAudio() {
