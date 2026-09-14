@@ -1,0 +1,9 @@
+.twilight-bar {
+  position: fixed;
+  background-color: var(--mat-sys-primary-container);
+  height: var(--twilight-bar-height);
+  bottom: var(--player-controls-bar-height);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}

@@ -1,5 +1,6 @@
 .main {
   padding-top: var(--top-bar-height);
-  padding-bottom: var(--player-controls-height);
+  padding-bottom: calc(var(--player-controls-bar-height) + var(--twilight-bar-height));
   font-size: 2rem;
+  display: block;
 }

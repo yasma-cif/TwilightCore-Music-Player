@@ -1,7 +1,7 @@
 .player-controls-bar {
   position: fixed;
   background-color: var(--mat-sys-secondary-container);
-  height: var(--player-controls-height);
+  height: var(--player-controls-bar-height);
   bottom: 0;
   left: 0;
   right: 0;

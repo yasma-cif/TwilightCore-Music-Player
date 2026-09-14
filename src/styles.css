@@ -10,5 +10,6 @@ body {
 
 :root {
   --top-bar-height: 60px;
-  --player-controls-height: 60px;
+  --twilight-bar-height: 40px;
+  --player-controls-bar-height: 60px;
 }

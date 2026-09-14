@@ -14,17 +14,17 @@
     </div>
 
     <div class="player-controls-center">
-      <button matIconButton class="player-controls-button">
+      <button matIconButton class="player-controls-button" (click)="playPrevious()">
         <i class="fas fa-backward-step"></i>
       </button>
       <button matIconButton class="player-controls-button-play" (click)="playAudio()">
-        @if (isPlaying) {
+        @if (isPlaying()) {
           <mat-icon class="fas fa-pause text-2xl" />
         } @else {
           <mat-icon class="fas fa-play text-2xl" />
         }
       </button>
-      <button matIconButton class="player-controls-button">
+      <button matIconButton class="player-controls-button" (click)="playNext()">
         <i class="fas fa-forward-step"></i>
       </button>
     </div>

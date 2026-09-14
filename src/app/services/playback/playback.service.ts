@@ -1,51 +1,81 @@
-import { Service } from '@angular/core';
+import { Service, signal } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Service()
 export class PlaybackService {
-  private readonly SONG = '/music/test2.mp3';
-  protected _current_Audio: HTMLAudioElement;
+  private readonly trackList: Array<string> = ['/music/test2.mp3', '/music/test1.mp3'];
+  private currentTrackNum = 0;
 
-  public constructor() {
-    this._current_Audio = new Audio();
+  private audioElement!: HTMLAudioElement;
 
-    this._current_Audio.src = this.SONG;
+  public readonly isPlaying = signal(false);
 
-    this._current_Audio.preservesPitch = false;
-    this._current_Audio.playbackRate = 1;
-  }
+  private readonly playbackEventSubject = new Subject<PlaybackEvent>();
+  public readonly playbackEvent$: Observable<PlaybackEvent> =
+    this.playbackEventSubject.asObservable();
 
-  public get currentAudio() {
-    return this._current_Audio;
+  public get activeAudioElement(): HTMLAudioElement {
+    return this.audioElement;
   }
 
   public get playbackRate(): number {
-    return this._current_Audio.playbackRate;
-  }
-
-  public get isPlaying(): boolean {
-    return !this._current_Audio.paused;
+    return this.audioElement.playbackRate;
   }
 
   public get duration(): number {
-    return this._current_Audio.duration;
+    return this.audioElement.duration;
   }
 
   public get progressPercentage(): number {
-    return (this._current_Audio.currentTime / this._current_Audio.duration) * 100;
+    return (this.audioElement.currentTime / this.audioElement.duration) * 100;
+  }
+
+  public set onTimeUpdate(ev: () => void) {
+    this.audioElement.ontimeupdate = ev;
+  }
+
+  public constructor() {
+    this.audioElement = new Audio();
+    this.setupNewTrack(this.trackList[this.currentTrackNum]);
+  }
+
+  public setupNewTrack(newAudio: string) {
+    this.audioElement.src = newAudio;
+
+    this.audioElement.preservesPitch = false;
+    this.audioElement.playbackRate = 1;
   }
 
   public async playAudio() {
-    if (this._current_Audio.paused) {
-      await this._current_Audio.play();
+    if (this.audioElement.paused) {
+      this.playbackEventSubject.next({ type: 'played', track: this.audioElement });
+      this.isPlaying.set(true);
+      await this.audioElement.play();
     } else {
-      this._current_Audio.pause();
+      this.playbackEventSubject.next({ type: 'paused', track: this.audioElement });
+      this.isPlaying.set(false);
+      this.audioElement.pause();
     }
   }
 
   public increaseSpeed() {
-    this._current_Audio.playbackRate += 0.02;
+    this.audioElement.playbackRate += 0.02;
   }
   public decreaseSpeed() {
-    this._current_Audio.playbackRate -= 0.02;
+    this.audioElement.playbackRate -= 0.02;
+  }
+
+  public async playNext() {
+    this.currentTrackNum =
+      (this.currentTrackNum + 1 + this.trackList.length) % this.trackList.length;
+    this.setupNewTrack(this.trackList[this.currentTrackNum]);
+    await this.playAudio();
+  }
+
+  public async playPrevious() {
+    this.currentTrackNum =
+      (this.currentTrackNum - 1 + this.trackList.length) % this.trackList.length;
+    this.setupNewTrack(this.trackList[this.currentTrackNum]);
+    await this.playAudio();
   }
 }
