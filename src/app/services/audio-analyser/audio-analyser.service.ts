@@ -1,6 +1,7 @@
 import { inject, Service } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { PlaybackService } from '../playback/playback.service';
+import { Vector3 } from 'three';
 
 @Service()
 export class AudioAnalyserService {
@@ -12,8 +13,8 @@ export class AudioAnalyserService {
   private analyser!: AnalyserNode;
   private source!: MediaElementAudioSourceNode;
 
-  private readonly peakSubject = new Subject<number>();
-  public readonly peak$: Observable<number> = this.peakSubject.asObservable();
+  private readonly peakSubject = new Subject<Vector3>();
+  public readonly peak$: Observable<Vector3> = this.peakSubject.asObservable();
 
   constructor() {
     this.audioCtx = new AudioContext();
@@ -48,17 +49,25 @@ export class AudioAnalyserService {
 
       this.analyser.getByteFrequencyData(dataArray);
 
-      let peak = 0;
-      for (const value of dataArray) {
-        if (value > peak) {
-          peak = value;
-        }
-      }
+      const trimmedArray = dataArray.subarray(0, 300);
 
-      const normalizedPeak = peak / 255;
+      const lowsArray = trimmedArray.subarray(0, trimmedArray.length / 3);
+      const midsArray = trimmedArray.subarray(
+        trimmedArray.length / 3,
+        (2 * trimmedArray.length) / 3,
+      );
+      const highsArray = trimmedArray.subarray((2 * trimmedArray.length) / 3, trimmedArray.length);
 
-      console.log('Peak:', normalizedPeak);
-      this.peakSubject.next(normalizedPeak);
+      const lowsAverage =
+        lowsArray.reduce((sum, value) => sum + value, 0) / (lowsArray.length * 255);
+      const midsAverage =
+        midsArray.reduce((sum, value) => sum + value, 0) / (midsArray.length * 255);
+      const highsAverage =
+        highsArray.reduce((sum, value) => sum + value, 0) / (highsArray.length * 255);
+
+      const newVector = new Vector3(lowsAverage, midsAverage, highsAverage);
+
+      this.peakSubject.next(newVector);
 
       requestAnimationFrame(analyse);
     };

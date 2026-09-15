@@ -1,4 +1,4 @@
-.twilight-bar {
+.twilight-bar-parent {
   position: fixed;
   background-color: var(--mat-sys-primary-container);
   height: var(--twilight-bar-height);
@@ -6,4 +6,21 @@
   left: 0;
   right: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.twilight-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  height: 4px;
+  background: var(--mat-sys-surface);
+}
+
+.twilight-bar-thumb {
+  color: var(--mat-sys-text);
+  font-size: 24px;
 }

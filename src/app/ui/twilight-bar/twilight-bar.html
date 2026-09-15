@@ -1,1 +1,15 @@
-<div class="twilight-bar"></div>
+<div
+  class="twilight-bar-parent"
+  (pointerdown)="onPointerDown($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointermove)="onPointerMove($event)"
+>
+  <div #twilightBar class="twilight-bar">
+    <i
+      class="twilight-bar-thumb fas"
+      [class]="thumbIcon()"
+      [style.margin-left.%]="thumbPosition()"
+    ></i>
+  </div>
+  <p style="position: absolute; right: 5px">{{ twilightBarValue() }}</p>
+</div>

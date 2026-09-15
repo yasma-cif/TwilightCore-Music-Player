@@ -14,12 +14,21 @@ export class PlaybackService {
   public readonly playbackEvent$: Observable<PlaybackEvent> =
     this.playbackEventSubject.asObservable();
 
+  private readonly playbackRateChangeSubject = new Subject<number>();
+  public readonly playbackRateChange$: Observable<number> =
+    this.playbackRateChangeSubject.asObservable();
+
   public get activeAudioElement(): HTMLAudioElement {
     return this.audioElement;
   }
 
   public get playbackRate(): number {
     return this.audioElement.playbackRate;
+  }
+
+  public set playbackRate(val: number) {
+    this.audioElement.playbackRate = val;
+    this.playbackRateChangeSubject.next(this.audioElement.playbackRate);
   }
 
   public get duration(): number {
@@ -30,20 +39,27 @@ export class PlaybackService {
     return (this.audioElement.currentTime / this.audioElement.duration) * 100;
   }
 
+  public set progressPercentage(percent: number) {
+    this.audioElement.currentTime = (percent * this.audioElement.duration) / 100;
+  }
+
   public set onTimeUpdate(ev: () => void) {
     this.audioElement.ontimeupdate = ev;
   }
 
   public constructor() {
     this.audioElement = new Audio();
+    this.audioElement.preservesPitch = false;
+
+    this.audioElement.onended = this.onFinishPlaying;
+
     this.setupNewTrack(this.trackList[this.currentTrackNum]);
   }
 
   public setupNewTrack(newAudio: string) {
+    const oldPlaybackRate = this.playbackRate;
     this.audioElement.src = newAudio;
-
-    this.audioElement.preservesPitch = false;
-    this.audioElement.playbackRate = 1;
+    this.audioElement.playbackRate = oldPlaybackRate;
   }
 
   public async playAudio() {
@@ -58,12 +74,10 @@ export class PlaybackService {
     }
   }
 
-  public increaseSpeed() {
-    this.audioElement.playbackRate += 0.02;
-  }
-  public decreaseSpeed() {
-    this.audioElement.playbackRate -= 0.02;
-  }
+  private onFinishPlaying = () => {
+    console.log('finished');
+    this.isPlaying.set(false);
+  };
 
   public async playNext() {
     this.currentTrackNum =

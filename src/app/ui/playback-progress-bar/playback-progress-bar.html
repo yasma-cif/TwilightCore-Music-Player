@@ -1,1 +1,20 @@
-<mat-progress-bar mode="determinate" [value]="playbackProgress()" class="playback-progress-bar" />
+<div
+  class="progress-bar-parent"
+  (pointerdown)="onPointerDown($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerenter)="onPointerEnter()"
+  (pointerleave)="onPointerLeave()"
+>
+  <div #progressBar class="progress-bar">
+    <div
+      class="progress-bar-fill"
+      [style.width.%]="progressBarValue()"
+      [style.height.px]="progressBarHeight()"
+    >
+      @if (showThumb()) {
+        <i class="progress-bar-thumb fas fa-circle"></i>
+      }
+    </div>
+  </div>
+</div>

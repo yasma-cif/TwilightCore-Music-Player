@@ -11,6 +11,8 @@ import { AudioAnalyserService } from '../../services/audio-analyser/audio-analys
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { PlaybackService } from '../../services/playback/playback.service';
+import { MathUtils } from '../../common/math-utils';
+import { Easings } from '../../common/easings';
 
 @Component({
   imports: [],
@@ -34,13 +36,21 @@ export class Visualizer implements OnDestroy {
 
   constructor() {
     afterNextRender(() => this.setupVisualizer());
+
+    this.playbackService.playbackRateChange$.subscribe((event) => this.onPlaybackRateChange(event));
   }
 
   private setupVisualizer() {
     const { clientWidth: width, clientHeight: height } = this.hostRef.nativeElement;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color('#3d0045');
+    const normalizedValue = MathUtils.inverseLerp(3, 0.25, 1);
+
+    this.scene.background = new THREE.Color().setRGB(
+      normalizedValue,
+      normalizedValue,
+      normalizedValue,
+    );
 
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvasRef().nativeElement });
     this.renderer.setSize(width, height);
@@ -59,13 +69,11 @@ export class Visualizer implements OnDestroy {
     this.resizeObserver = new ResizeObserver(() => this.onResize());
     this.resizeObserver.observe(this.hostRef.nativeElement);
 
-    this.audioAnalyserService.peak$.subscribe((peak) => {
-      const val = 1 + THREE.MathUtils.inverseLerp(0.7, 1, peak);
-
+    this.audioAnalyserService.peak$.subscribe((val) => {
       gsap.to(this.cube.scale, {
-        x: val,
-        y: val,
-        z: val,
+        x: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val.x)),
+        y: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val.y)),
+        z: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val.z)),
         duration: 0.1,
       });
     });
@@ -73,8 +81,8 @@ export class Visualizer implements OnDestroy {
 
   private animate = (time: number) => {
     if (this.playbackService.isPlaying()) {
-      this.cube.rotation.x = time / 2000;
-      this.cube.rotation.y = time / 1000;
+      this.cube.rotation.x = (time / 2000) * this.playbackService.playbackRate;
+      this.cube.rotation.y = (time / 1000) * this.playbackService.playbackRate;
     }
 
     this.renderer.render(this.scene, this.camera);
@@ -87,6 +95,16 @@ export class Visualizer implements OnDestroy {
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height);
+  }
+
+  private onPlaybackRateChange(val: number): void {
+    let normalizedValue = MathUtils.inverseLerp(3, 0.25, val);
+    normalizedValue = Easings.easeInOutCirc(normalizedValue);
+    this.scene.background = new THREE.Color().setRGB(
+      normalizedValue,
+      normalizedValue,
+      normalizedValue,
+    );
   }
 
   ngOnDestroy() {
