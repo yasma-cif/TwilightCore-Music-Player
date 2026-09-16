@@ -96,7 +96,6 @@ export class Visualizer implements OnDestroy {
     )
       return;
 
-    console.log('wiwi');
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(width, height, false);
