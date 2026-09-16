@@ -1,15 +1,18 @@
 <div class="player-controls-bar">
+  @if (showTwilightBar()) {
+    <tw-twilight-bar />
+  }
   <tw-playback-progress-bar />
   <div class="player-controls">
     <div class="player-controls-start">
-      <button matIconButton class="player-controls-button">
-        <i class="fas fa-bars"></i>
+      <button matIconButton class="player-controls-button" (click)="sideMenuState.toggleSideMenu()">
+        <i class="fas fa-bars" [class.disabled-icon]="!sideMenuState.isOpen()"></i>
+      </button>
+      <button matIconButton class="player-controls-button" (click)="switchRepeatMode()">
+        <i class="fas fad" [class]="repeatIcon()"></i>
       </button>
       <button matIconButton class="player-controls-button">
-        <i class="fas fa-repeat"></i>
-      </button>
-      <button matIconButton class="player-controls-button">
-        <i class="fas fa-random"></i>
+        <i class="fas fa-random disabled-icon"></i>
       </button>
     </div>
 
@@ -30,7 +33,7 @@
     </div>
 
     <div class="player-controls-end">
-      <button matIconButton class="player-controls-button">
+      <button matIconButton class="player-controls-button" (click)="toggleTwilightBar()">
         <i class="fas fa-moon"></i>
       </button>
     </div>

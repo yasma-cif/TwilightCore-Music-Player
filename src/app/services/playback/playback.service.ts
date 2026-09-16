@@ -1,14 +1,21 @@
-import { Service, signal } from '@angular/core';
+import { Service, signal, WritableSignal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { PlaybackRepeatMode } from './playback-repeat-mode';
 
 @Service()
 export class PlaybackService {
-  private readonly trackList: Array<string> = ['/music/test2.mp3', '/music/test1.mp3'];
+  private readonly trackList: Array<string> = [
+    '/music/test1.mp3',
+    '/music/test2.mp3',
+    '/music/test3.mp3',
+  ];
   private currentTrackNum = 0;
 
   private audioElement!: HTMLAudioElement;
 
   public readonly isPlaying = signal(false);
+
+  private _repeatMode: WritableSignal<PlaybackRepeatMode>;
 
   private readonly playbackEventSubject = new Subject<PlaybackEvent>();
   public readonly playbackEvent$: Observable<PlaybackEvent> =
@@ -43,6 +50,14 @@ export class PlaybackService {
     this.audioElement.currentTime = (percent * this.audioElement.duration) / 100;
   }
 
+  public get repeatMode(): PlaybackRepeatMode {
+    return this._repeatMode();
+  }
+
+  public set repeatMode(mode: PlaybackRepeatMode) {
+    this._repeatMode.set(mode);
+  }
+
   public set onTimeUpdate(ev: () => void) {
     this.audioElement.ontimeupdate = ev;
   }
@@ -54,6 +69,8 @@ export class PlaybackService {
     this.audioElement.onended = this.onFinishPlaying;
 
     this.setupNewTrack(this.trackList[this.currentTrackNum]);
+
+    this._repeatMode = signal(PlaybackRepeatMode.RepeatCategory);
   }
 
   public setupNewTrack(newAudio: string) {
@@ -74,9 +91,19 @@ export class PlaybackService {
     }
   }
 
-  private onFinishPlaying = () => {
-    console.log('finished');
-    this.isPlaying.set(false);
+  private onFinishPlaying = async () => {
+    switch (this._repeatMode()) {
+      case PlaybackRepeatMode.None:
+        this.isPlaying.set(false);
+        break;
+      case PlaybackRepeatMode.RepeatCategory:
+        await this.playNext();
+        break;
+      case PlaybackRepeatMode.RepeatSong:
+        this.setupNewTrack(this.trackList[this.currentTrackNum]);
+        await this.playAudio();
+        break;
+    }
   };
 
   public async playNext() {

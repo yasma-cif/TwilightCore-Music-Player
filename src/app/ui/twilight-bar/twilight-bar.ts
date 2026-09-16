@@ -8,11 +8,12 @@ import {
   computed,
   Signal,
 } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { PlaybackService } from '../../services/playback/playback.service';
 import { MathUtils } from '../../common/math-utils';
 
 @Component({
-  imports: [],
+  imports: [DecimalPipe],
   selector: 'tw-twilight-bar',
   styleUrl: './twilight-bar.css',
   templateUrl: './twilight-bar.html',
@@ -38,10 +39,15 @@ export class TwilightBar implements OnInit {
   }
 
   ngOnInit() {
-    const valInRange = MathUtils.inverseLerp(this.twilightValueMin, this.twilightValueMax, 1);
+    const valInRange = MathUtils.inverseLerp(
+      this.twilightValueMin,
+      this.twilightValueMax,
+      this.playbackService.playbackRate,
+    );
     const thumbVal = MathUtils.lerp(-100, 100, valInRange);
-
     this.thumbPosition.set(thumbVal);
+
+    this.twilightBarValue.set(this.playbackService.playbackRate);
   }
 
   private async setTwilightValue(pos: number) {
@@ -49,13 +55,13 @@ export class TwilightBar implements OnInit {
 
     const normalizedVal = MathUtils.inverseLerp(0, maxBarVal, pos);
     const valInRange = MathUtils.lerp(this.twilightValueMin, this.twilightValueMax, normalizedVal);
+    const trimmedValInRange = Number(valInRange.toFixed(2));
 
     const thumbVal = MathUtils.lerp(-100, 100, normalizedVal);
-
     this.thumbPosition.set(thumbVal);
 
-    this.playbackService.playbackRate = valInRange;
-    this.twilightBarValue.set(valInRange);
+    this.playbackService.playbackRate = trimmedValInRange;
+    this.twilightBarValue.set(trimmedValInRange);
 
     console.log(this.twilightBarValue());
   }

@@ -13,7 +13,9 @@
 }
 
 .top-bar-start {
+  display: flex;
   justify-self: start;
+  align-items: center;
 }
 
 .top-bar-center {
@@ -21,5 +23,6 @@
 }
 
 .top-bar-end {
+  display: flex;
   justify-self: end;
 }

@@ -2,6 +2,7 @@
   position: absolute;
   display: flex;
   align-items: center;
+  z-index: 1001;
   height: 16px;
   top: 0;
   left: 0;

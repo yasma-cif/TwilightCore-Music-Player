@@ -32,7 +32,7 @@ export class Visualizer implements OnDestroy {
   private audioAnalyserService = inject(AudioAnalyserService);
   private playbackService = inject(PlaybackService);
 
-  private resizeObserver?: ResizeObserver;
+  private currentRendererSize!: THREE.Vector2;
 
   constructor() {
     afterNextRender(() => this.setupVisualizer());
@@ -53,7 +53,9 @@ export class Visualizer implements OnDestroy {
     );
 
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvasRef().nativeElement });
-    this.renderer.setSize(width, height);
+    this.renderer.setSize(width, height, false);
+
+    this.currentRendererSize = new THREE.Vector2(width, height);
 
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.z = 3;
@@ -65,9 +67,6 @@ export class Visualizer implements OnDestroy {
     this.scene.add(this.cube);
 
     this.renderer.setAnimationLoop(this.animate);
-
-    this.resizeObserver = new ResizeObserver(() => this.onResize());
-    this.resizeObserver.observe(this.hostRef.nativeElement);
 
     this.audioAnalyserService.peak$.subscribe((val) => {
       gsap.to(this.cube.scale, {
@@ -84,17 +83,25 @@ export class Visualizer implements OnDestroy {
       this.cube.rotation.x = (time / 2000) * this.playbackService.playbackRate;
       this.cube.rotation.y = (time / 1000) * this.playbackService.playbackRate;
     }
-
+    this.onResize();
     this.renderer.render(this.scene, this.camera);
   };
 
   private onResize() {
     const { clientWidth: width, clientHeight: height } = this.hostRef.nativeElement;
-    if (width === 0 || height === 0) return;
+    if (
+      width === 0 ||
+      height === 0 ||
+      this.currentRendererSize.equals(new THREE.Vector2(width, height))
+    )
+      return;
 
+    console.log('wiwi');
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
-    this.renderer.setSize(width, height);
+    this.renderer.setSize(width, height, false);
+
+    this.currentRendererSize = new THREE.Vector2(width, height);
   }
 
   private onPlaybackRateChange(val: number): void {

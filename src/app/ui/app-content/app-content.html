@@ -1,0 +1,14 @@
+<mat-drawer-container>
+  <mat-drawer
+    class="side-menu-drawer"
+    mode="side"
+    [opened]="sidemenuState.isOpen()"
+    style="border-radius: 0"
+  >
+    <tw-side-menu />
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <tw-visualizer />
+  </mat-drawer-content>
+</mat-drawer-container>
