@@ -22,6 +22,9 @@ export class PlaybackService {
   public readonly playbackRateChange$: Observable<number> =
     this.playbackRateChangeSubject.asObservable();
 
+  private readonly timeUpdateSubject = new Subject<Event>();
+  public readonly timeUpdate$: Observable<Event> = this.timeUpdateSubject.asObservable();
+
   public get activeAudioElement(): HTMLAudioElement {
     return this.audioElement;
   }
@@ -37,6 +40,10 @@ export class PlaybackService {
 
   public get duration(): number {
     return this.audioElement.duration;
+  }
+
+  public get progress(): number {
+    return this.audioElement.currentTime;
   }
 
   public get progressPercentage(): number {
@@ -55,21 +62,29 @@ export class PlaybackService {
     this._repeatMode.set(mode);
   }
 
-  public set onTimeUpdate(ev: () => void) {
-    this.audioElement.ontimeupdate = ev;
-  }
-
   public constructor() {
     this.audioElement = new Audio();
     this.audioElement.preservesPitch = false;
 
-    this.audioElement.onended = this.onFinishPlaying;
-
-    this.setupNewTrack(
-      this._playlistService.currentPlaylist[this._playlistService.currentTrackNum].url,
-    );
+    this.audioElement.addEventListener('ended', async () => {
+      await this.onFinishPlaying();
+    });
 
     this._repeatMode = signal(PlaybackRepeatMode.RepeatCategory);
+
+    this.audioElement.ontimeupdate = (ev) => {
+      this.timeUpdateSubject.next(ev);
+    };
+
+    void this.initializeFirstTrack();
+  }
+
+  private async initializeFirstTrack() {
+    await this._playlistService.ready;
+
+    this.setupNewTrack(
+      this._playlistService.currentPlaylist()[this._playlistService.currentTrackNum].url,
+    );
   }
 
   public setupNewTrack(newAudio: string) {
@@ -100,7 +115,7 @@ export class PlaybackService {
         break;
       case PlaybackRepeatMode.RepeatSong:
         this.setupNewTrack(
-          this._playlistService.currentPlaylist[this._playlistService.currentTrackNum].url,
+          this._playlistService.currentPlaylist()[this._playlistService.currentTrackNum].url,
         );
         await this.playAudio();
         break;
@@ -109,19 +124,19 @@ export class PlaybackService {
 
   public async playNext() {
     this._playlistService.playNext();
-    this.setupNewTrack(this._playlistService.currentTrack().url);
+    this.setupNewTrack(this._playlistService.currentTrack()!.url);
     await this.playAudio();
   }
 
   public async playPrevious() {
     this._playlistService.playPrevious();
-    this.setupNewTrack(this._playlistService.currentTrack().url);
+    this.setupNewTrack(this._playlistService.currentTrack()!.url);
     await this.playAudio();
   }
 
   public async playByNumber(num: number) {
     this._playlistService.playByNumber(num);
-    this.setupNewTrack(this._playlistService.currentTrack().url);
+    this.setupNewTrack(this._playlistService.currentTrack()!.url);
     await this.playAudio();
   }
 }

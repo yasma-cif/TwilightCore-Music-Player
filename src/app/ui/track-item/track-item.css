@@ -7,14 +7,32 @@
   cursor: pointer;
 }
 
+.track-item-info {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  font-size: 0.8em;
+}
+
+.track-item-duration {
+  font-size: 0.6em;
+  margin-left: auto;
+  margin-right: 1em;
+}
+
 .track-item:hover {
   filter: brightness(125%);
 }
 
 :host(.playing) .track-item {
-  background-color: var(--mat-sys-secondary);
+  background-color: var(--mat-sys-primary);
 }
 
 :host(.playing) .track-item:hover {
   filter: brightness(100%);
+}
+
+.cover-art {
+  width: 2em;
+  height: auto;
 }

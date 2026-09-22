@@ -1,10 +1,10 @@
 <div class="side-menu">
   <ul class="track-list">
-    @for (t of playlistService.currentPlaylist; track $index) {
+    @for (t of playlistService.currentPlaylist(); track $index) {
       <tw-track-item
-        [trackTitle]="t.title"
+        [track]="t"
         [trackNumber]="$index + 1"
-        [class.playing]="t.title === playlistService.currentTrack().title"
+        [class.playing]="t.url === playlistService.currentTrack()?.url"
       />
     }
   </ul>

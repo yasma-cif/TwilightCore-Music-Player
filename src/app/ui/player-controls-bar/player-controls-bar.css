@@ -58,6 +58,11 @@
   justify-content: center;
 }
 
+.track-progress {
+  font-size: 0.8em;
+  margin-right: 1em;
+}
+
 .disabled-icon {
   color: gray;
 }

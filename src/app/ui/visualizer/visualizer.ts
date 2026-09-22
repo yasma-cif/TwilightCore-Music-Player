@@ -13,6 +13,7 @@ import gsap from 'gsap';
 import { PlaybackService } from '../../services/playback/playback.service';
 import { MathUtils } from '../../common/math-utils';
 import { Easings } from '../../common/easings';
+import { PlaylistService } from '../../services/playlist/playlist.service';
 
 @Component({
   imports: [],
@@ -31,6 +32,7 @@ export class Visualizer implements OnDestroy {
 
   private audioAnalyserService = inject(AudioAnalyserService);
   private playbackService = inject(PlaybackService);
+  private playlistService = inject(PlaylistService);
 
   private currentRendererSize!: THREE.Vector2;
 
@@ -38,6 +40,7 @@ export class Visualizer implements OnDestroy {
     afterNextRender(() => this.setupVisualizer());
 
     this.playbackService.playbackRateChange$.subscribe((event) => this.onPlaybackRateChange(event));
+    this.playbackService.playbackEvent$.subscribe(() => this.onPlaybackEvent());
   }
 
   private setupVisualizer() {
@@ -65,6 +68,9 @@ export class Visualizer implements OnDestroy {
     this.cube = new THREE.Mesh(geometry, material);
     this.cube.setRotationFromEuler(new THREE.Euler(0, 1, 4, 'XYZ'));
     this.scene.add(this.cube);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    this.scene.add(ambientLight);
 
     this.renderer.setAnimationLoop(this.animate);
 
@@ -101,6 +107,22 @@ export class Visualizer implements OnDestroy {
     this.renderer.setSize(width, height, false);
 
     this.currentRendererSize = new THREE.Vector2(width, height);
+  }
+
+  private onPlaybackEvent(): void {
+    if (this.playlistService.currentTrack()?.coverArt) {
+      const textureLoader = new THREE.TextureLoader();
+
+      textureLoader.load(this.playlistService.currentTrack()?.coverArt ?? '', (texture) => {
+        const material = new THREE.MeshStandardMaterial({
+          map: texture,
+        });
+
+        this.cube.material = material;
+      });
+    } else {
+      this.cube.material = new THREE.MeshNormalMaterial();
+    }
   }
 
   private onPlaybackRateChange(val: number): void {

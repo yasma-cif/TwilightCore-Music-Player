@@ -62,8 +62,6 @@ export class TwilightBar implements OnInit {
 
     this.playbackService.playbackRate = trimmedValInRange;
     this.twilightBarValue.set(trimmedValInRange);
-
-    console.log(this.twilightBarValue());
   }
 
   private calculatePointerPosition(ev: PointerEvent) {

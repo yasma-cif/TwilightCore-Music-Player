@@ -1,3 +1,16 @@
 <button class="track-item" (click)="playTrack()">
-  <p class="ml-4">{{ trackNumber() }}. {{ trackTitle() }}</p>
+  <div class="ml-4">{{ trackNumber() }}.</div>
+  <div class="track-item-info ml-4">
+    <p>{{ track().title }}</p>
+    @if (track().artist) {
+      <p>{{ track().artist }}</p>
+    }
+  </div>
+  <div class="track-item-duration">
+    <p>{{ track().duration | date: 'mm:ss' }}</p>
+  </div>
+
+  <!-- @if (track().coverArt) {
+    <img [src]="track().coverArt" class="cover-art ml-8" alt="cover-image" />
+  } -->
 </button>

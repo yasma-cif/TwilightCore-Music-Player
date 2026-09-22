@@ -33,6 +33,17 @@
     </div>
 
     <div class="player-controls-end">
+      <div class="track-progress">
+        @if (trackProgress() && trackDuration()) {
+          <p>
+            {{ trackProgress() / playbackService.playbackRate | date: 'mm:ss' }} /
+            {{ trackDuration() / playbackService.playbackRate | date: 'mm:ss' }}
+          </p>
+        }
+      </div>
+      <button matIconButton class="player-controls-button">
+        <i class="fas fa-volume disabled-icon"></i>
+      </button>
       <button matIconButton class="player-controls-button" (click)="toggleTwilightBar()">
         <i class="fas fa-moon"></i>
       </button>

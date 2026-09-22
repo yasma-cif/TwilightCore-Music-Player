@@ -22,9 +22,7 @@ export class PlaybackProgressBar implements OnInit {
   protected isSeeking = false;
 
   ngOnInit() {
-    this.playbackService.onTimeUpdate = () => {
-      this.setPlaybackBarProgress();
-    };
+    this.playbackService.timeUpdate$.subscribe(() => this.setPlaybackBarProgress());
   }
 
   private setPlaybackBarProgress() {
