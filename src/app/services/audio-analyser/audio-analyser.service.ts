@@ -2,6 +2,7 @@ import { inject, Service } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { PlaybackService } from '../playback/playback.service';
 import { Vector3 } from 'three';
+import { PlaybackEvent } from '../playback/playback-event';
 
 @Service()
 export class AudioAnalyserService {

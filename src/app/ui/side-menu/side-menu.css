@@ -3,3 +3,9 @@
   height: 100%;
   align-items: center;
 }
+
+.track-list {
+  display: grid;
+  gap: 0.2em;
+  margin: 0 6px;
+}

@@ -1,21 +1,18 @@
-import { Service, signal, WritableSignal } from '@angular/core';
+import { inject, Service, signal, WritableSignal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { PlaybackRepeatMode } from './playback-repeat-mode';
+import { PlaybackEvent } from './playback-event';
+import { PlaylistService } from '../playlist/playlist.service';
 
 @Service()
 export class PlaybackService {
-  private readonly trackList: Array<string> = [
-    '/music/test1.mp3',
-    '/music/test2.mp3',
-    '/music/test3.mp3',
-  ];
-  private currentTrackNum = 0;
+  private readonly _playlistService = inject(PlaylistService);
 
   private audioElement!: HTMLAudioElement;
 
   public readonly isPlaying = signal(false);
 
-  private _repeatMode: WritableSignal<PlaybackRepeatMode>;
+  private readonly _repeatMode: WritableSignal<PlaybackRepeatMode>;
 
   private readonly playbackEventSubject = new Subject<PlaybackEvent>();
   public readonly playbackEvent$: Observable<PlaybackEvent> =
@@ -68,7 +65,9 @@ export class PlaybackService {
 
     this.audioElement.onended = this.onFinishPlaying;
 
-    this.setupNewTrack(this.trackList[this.currentTrackNum]);
+    this.setupNewTrack(
+      this._playlistService.currentPlaylist[this._playlistService.currentTrackNum].url,
+    );
 
     this._repeatMode = signal(PlaybackRepeatMode.RepeatCategory);
   }
@@ -100,23 +99,29 @@ export class PlaybackService {
         await this.playNext();
         break;
       case PlaybackRepeatMode.RepeatSong:
-        this.setupNewTrack(this.trackList[this.currentTrackNum]);
+        this.setupNewTrack(
+          this._playlistService.currentPlaylist[this._playlistService.currentTrackNum].url,
+        );
         await this.playAudio();
         break;
     }
   };
 
   public async playNext() {
-    this.currentTrackNum =
-      (this.currentTrackNum + 1 + this.trackList.length) % this.trackList.length;
-    this.setupNewTrack(this.trackList[this.currentTrackNum]);
+    this._playlistService.playNext();
+    this.setupNewTrack(this._playlistService.currentTrack().url);
     await this.playAudio();
   }
 
   public async playPrevious() {
-    this.currentTrackNum =
-      (this.currentTrackNum - 1 + this.trackList.length) % this.trackList.length;
-    this.setupNewTrack(this.trackList[this.currentTrackNum]);
+    this._playlistService.playPrevious();
+    this.setupNewTrack(this._playlistService.currentTrack().url);
+    await this.playAudio();
+  }
+
+  public async playByNumber(num: number) {
+    this._playlistService.playByNumber(num);
+    this.setupNewTrack(this._playlistService.currentTrack().url);
     await this.playAudio();
   }
 }

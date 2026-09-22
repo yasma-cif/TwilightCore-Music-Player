@@ -1,0 +1,20 @@
+.track-item {
+  display: flex;
+  height: 6vh;
+  width: 100%;
+  align-items: center;
+  background-color: var(--mat-sys-surface-variant);
+  cursor: pointer;
+}
+
+.track-item:hover {
+  filter: brightness(125%);
+}
+
+:host(.playing) .track-item {
+  background-color: var(--mat-sys-secondary);
+}
+
+:host(.playing) .track-item:hover {
+  filter: brightness(100%);
+}
