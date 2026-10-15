@@ -31,11 +31,3 @@ body {
   margin: 0;
   height: 100%;
 }
-
-:root {
-  @include mat.progress-bar-overrides(
-    (
-      track-color: none,
-    )
-  );
-}

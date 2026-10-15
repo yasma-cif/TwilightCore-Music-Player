@@ -9,6 +9,7 @@ export class PlaylistService {
     '/music/test2.mp3',
     '/music/test3.mp3',
     '/music/test4.mp3',
+    '/music/test5.mp3',
     '/music/other_tests/Last Engage (Prayer-Incantation).mp3',
     '/music/other_tests/Wind Garden.flac',
     '/music/other_tests/kk.mp3',

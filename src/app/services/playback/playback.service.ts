@@ -35,6 +35,8 @@ export class PlaybackService {
 
   public set playbackRate(val: number) {
     this.audioElement.playbackRate = val;
+
+    this.TEST_setUIColor();
     this.playbackRateChangeSubject.next(this.audioElement.playbackRate);
   }
 
@@ -76,6 +78,7 @@ export class PlaybackService {
       this.timeUpdateSubject.next(ev);
     };
 
+    this.TEST_setUIColor();
     void this.initializeFirstTrack();
   }
 
@@ -121,6 +124,23 @@ export class PlaybackService {
         break;
     }
   };
+
+  private TEST_setUIColor() {
+    const MIN = 0.25;
+    const MAX = 3;
+    const EASE = 1;
+    const CENTER = 1;
+
+    const r = Math.min(MAX, Math.max(MIN, this.audioElement.playbackRate));
+    const x =
+      r <= CENTER
+        ? (0.5 * (r - MIN)) / (CENTER - MIN)
+        : 0.5 + (0.5 * (r - CENTER)) / (MAX - CENTER);
+
+    const a = Math.pow(x, EASE);
+    const b = Math.pow(1 - x, EASE);
+    document.documentElement.style.setProperty('--t', String(a / (a + b)));
+  }
 
   public async playNext() {
     this._playlistService.playNext();

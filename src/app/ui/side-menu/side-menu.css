@@ -1,6 +1,5 @@
 .side-menu {
-  background-color: var(--mat-sys-surface-container-high);
-  height: 100%;
+  background-color: var(--mat-sys-secondary-container);
   align-items: center;
 }
 
