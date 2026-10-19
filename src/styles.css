@@ -24,7 +24,7 @@ body {
   --day-primary: oklch(55% 0.11 71.51deg);
   --day-secondary: oklch(38% 0.088 72deg);
   --day-surface: #fff;
-  --day-crust: oklch(29% 0.015 25.79deg);
+  --day-crust: oklch(19% 0.015 25.79deg);
 
   --night-primary: oklch(37% 0.093 322deg);
   --night-secondary: oklch(13% 0.21 322deg);

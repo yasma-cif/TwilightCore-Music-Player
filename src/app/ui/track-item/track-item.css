@@ -1,9 +1,11 @@
 .track-item {
   display: flex;
   height: 6vh;
-  width: 100%;
+  width: 100vw;
+  max-width: 24.5%;
   align-items: center;
-  background-color: var(--mat-sys-surface-variant);
+  background-color: var(--color-crust);
+  border: 3px solid var(--color-primary);
   cursor: pointer;
   border-radius: 20px;
   min-height: 70px;
@@ -15,6 +17,8 @@
   align-items: start;
   font-size: 0.8em;
   text-wrap-mode: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .track-item-duration {
