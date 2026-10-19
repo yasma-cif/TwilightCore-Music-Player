@@ -5,6 +5,8 @@
   align-items: center;
   background-color: var(--mat-sys-surface-variant);
   cursor: pointer;
+  border-radius: 20px;
+  min-height: 70px;
 }
 
 .track-item-info {
@@ -12,6 +14,7 @@
   flex-direction: column;
   align-items: start;
   font-size: 0.8em;
+  text-wrap-mode: nowrap;
 }
 
 .track-item-duration {

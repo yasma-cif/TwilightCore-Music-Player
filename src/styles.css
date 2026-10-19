@@ -16,31 +16,37 @@ body {
   /* Theming */
 
   --t: 0;
-  --day-primary: oklch(65% 0.17 55deg);
-  --night-primary: oklch(45% 0.2 300deg);
-  --day-secondary: oklch(45% 0.17 55deg);
-  --night-secondary: oklch(25% 0.2 300deg);
-  --day-surface: oklch(77% 0.12 70deg);
-  --night-surface: oklch(22% 0.15 300deg);
-  --day-crust: oklch(57% 0.02 70deg);
-  --night-crust: oklch(22% 0.05 300deg);
+  --easing-strong: calc(
+    50% + 50% * sign(var(--t) - 0.5) * (1 - pow(1 - 2 * abs(var(--t) - 0.5), 8))
+  );
+  --easing: calc(var(--t) * 100%);
+
+  --day-primary: oklch(55% 0.11 71.51deg);
+  --day-secondary: oklch(38% 0.088 72deg);
+  --day-surface: #fff;
+  --day-crust: oklch(29% 0.015 25.79deg);
+
+  --night-primary: oklch(37% 0.093 322deg);
+  --night-secondary: oklch(13% 0.21 322deg);
+  --night-surface: #fff;
+  --night-crust: oklch(19% 0.015 25.79deg);
 
   --color-primary: color-mix(
-    in oklch,
+    in display-p3,
     var(--day-primary),
-    var(--night-primary) calc(var(--t) * 100%)
+    var(--night-primary) calc(var(--easing))
   );
   --color-secondary: color-mix(
-    in oklch,
+    in display-p3,
     var(--day-secondary),
-    var(--night-secondary) calc(var(--t) * 100%)
+    var(--night-secondary) calc(var(--easing))
   );
   --color-surface: color-mix(
-    in oklch,
+    in display-p3,
     var(--day-surface),
-    var(--night-surface) calc(var(--t) * 100%)
+    var(--night-surface) calc(var(--easing))
   );
-  --color-crust: color-mix(in oklch, var(--day-crust), var(--night-crust) calc(var(--t) * 100%));
+  --color-crust: color-mix(in display-p3, var(--day-crust), var(--night-crust) calc(var(--easing)));
 
   --mat-sys-primary: var(--color-primary);
   --mat-sys-surface: var(--color-crust);

@@ -35,7 +35,15 @@ export class TwilightBar implements OnInit {
   protected twilightValueMax = 3;
 
   constructor() {
-    this.thumbIcon = computed(() => (this.twilightBarValue() >= 1 ? 'fa-moon' : 'fa-sun'));
+    this.thumbIcon = computed(() => {
+      if (this.twilightBarValue() > 1) {
+        return 'fa-moon';
+      } else if (this.twilightBarValue() < 1) {
+        return 'fa-sun';
+      } else {
+        return 'fa-circle';
+      }
+    });
   }
 
   ngOnInit() {

@@ -63,7 +63,7 @@ export class Visualizer implements OnDestroy {
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.z = 3;
 
-    const geometry = new THREE.BoxGeometry();
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshNormalMaterial();
     this.cube = new THREE.Mesh(geometry, material);
     this.cube.setRotationFromEuler(new THREE.Euler(0, 1, 4, 'XYZ'));
