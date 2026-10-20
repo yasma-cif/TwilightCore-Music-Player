@@ -1,34 +1,50 @@
 .twilight-bar-section {
   position: fixed;
-  background-color: var(--mat-sys-primary-container);
+  background-color: var(--color-primary);
   height: var(--twilight-bar-height);
   bottom: var(--player-controls-bar-height);
-  left: 0;
   right: 0;
+  width: 14em;
   z-index: 1000;
   display: flex;
   align-items: center;
-  justify-content: center;
+  border-top-left-radius: 20px;
 }
 
 .twilight-bar-parent {
   height: 100%;
-  width: 40%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .twilight-bar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4px;
-  width: 100%;
-  background: var(--mat-sys-surface);
+  position: relative;
+  width: 300px;
+  height: 140px;
+}
+
+.curve {
+  position: absolute;
+
+  path {
+    fill: none;
+    stroke: var(--color-crust);
+    stroke-width: 4px;
+    stroke-linecap: round;
+  }
 }
 
 .twilight-bar-thumb {
   color: var(--mat-sys-text);
   font-size: 24px;
+  offset-path: path('M16,120 C80,20 220,20 284,120');
+  offset-rotate: auto;
+  offset-distance: 0%;
+}
+
+.twilight-value {
+  position: absolute;
+  bottom: 10px;
 }

@@ -1,8 +1,6 @@
 :host {
   display: block;
-  height: calc(
-    100vh - var(--top-bar-height) - var(--player-controls-bar-height) - var(--twilight-bar-height)
-  );
+  height: calc(100vh - var(--top-bar-height) - var(--player-controls-bar-height));
 }
 
 canvas {

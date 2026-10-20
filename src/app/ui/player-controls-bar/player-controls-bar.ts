@@ -5,7 +5,7 @@ import { PlaybackProgressBar } from '../playback-progress-bar/playback-progress-
 import { PlaybackService } from '../../services/playback/playback.service';
 import { TwilightBar } from '../twilight-bar/twilight-bar';
 import { PlaybackRepeatMode } from '../../services/playback/playback-repeat-mode';
-import { SideMenuStateService } from '../../services/side-menu-state/side-menu-state';
+import { TrackMenuStateService } from '../../services/track-menu-state/track-menu-state';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -16,7 +16,7 @@ import { DatePipe } from '@angular/common';
 })
 export class PlayerControlsBar implements OnInit {
   protected readonly playbackService = inject(PlaybackService);
-  protected readonly sideMenuState = inject(SideMenuStateService);
+  protected readonly sideMenuState = inject(TrackMenuStateService);
 
   protected readonly isPlaying: Signal<boolean>;
   protected readonly showTwilightBar = signal(true);

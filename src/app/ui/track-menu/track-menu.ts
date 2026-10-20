@@ -4,11 +4,11 @@ import { PlaylistService } from '../../services/playlist/playlist.service';
 
 @Component({
   imports: [TrackItem],
-  selector: 'tw-side-menu',
-  styleUrl: './side-menu.css',
-  templateUrl: './side-menu.html',
+  selector: 'tw-track-menu',
+  styleUrl: './track-menu.css',
+  templateUrl: './track-menu.html',
 })
-export class SideMenu {
+export class TrackMenu {
   protected readonly playlistService = inject(PlaylistService);
 
   constructor() {}

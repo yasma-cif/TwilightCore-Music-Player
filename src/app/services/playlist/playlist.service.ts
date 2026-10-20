@@ -23,6 +23,8 @@ export class PlaylistService {
     '/music/other_tests/daybreak.flac',
     '/music/other_tests/finale.flac',
     '/music/other_tests/baby.flac',
+    '/music/other_tests/mew.mp3',
+    '/music/other_tests/drift.mp3',
   ];
 
   private readonly _currentPlaylist = signal<Array<Track>>([]);

@@ -6,12 +6,15 @@
     (pointermove)="onPointerMove($event)"
   >
     <div #twilightBar class="twilight-bar">
+      <svg class="curve" viewBox="0 0 300 140" aria-hidden="true">
+        <path d="M16,120 C80,20 220,20 284,120" />
+      </svg>
       <i
         class="twilight-bar-thumb fas"
         [class]="thumbIcon()"
-        [style.margin-left.%]="thumbPosition()"
+        [style.offset-distance.%]="thumbPosition()"
       ></i>
     </div>
+    <p class="twilight-value">x{{ twilightBarValue() | number: '.2' }}</p>
   </div>
-  <p style="position: absolute; right: 5px">x{{ twilightBarValue() | number: '.2' }}</p>
 </div>

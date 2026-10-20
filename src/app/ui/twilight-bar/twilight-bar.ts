@@ -52,7 +52,7 @@ export class TwilightBar implements OnInit {
       this.twilightValueMax,
       this.playbackService.playbackRate,
     );
-    const thumbVal = MathUtils.lerp(-100, 100, valInRange);
+    const thumbVal = MathUtils.lerp(0, 100, valInRange);
     this.thumbPosition.set(thumbVal);
 
     this.twilightBarValue.set(this.playbackService.playbackRate);
@@ -65,7 +65,7 @@ export class TwilightBar implements OnInit {
     const valInRange = MathUtils.lerp(this.twilightValueMin, this.twilightValueMax, normalizedVal);
     const trimmedValInRange = Number(valInRange.toFixed(2));
 
-    const thumbVal = MathUtils.lerp(-100, 100, normalizedVal);
+    const thumbVal = MathUtils.lerp(0, 100, normalizedVal);
     this.thumbPosition.set(thumbVal);
 
     this.playbackService.playbackRate = trimmedValInRange;

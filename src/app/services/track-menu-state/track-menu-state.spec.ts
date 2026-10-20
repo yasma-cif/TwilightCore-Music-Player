@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { SideMenuState } from './side-menu-state';
+import { TrackMenuStateService } from './track-menu-state';
 
-describe('SideMenuState', () => {
-  let service: SideMenuState;
+describe('TrackMenuStateService', () => {
+  let service: TrackMenuStateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SideMenuState);
+    service = TestBed.inject(TrackMenuStateService);
   });
 
   it('should be created', () => {
