@@ -6,45 +6,52 @@
   right: 0;
   width: 14em;
   z-index: 1000;
-  display: flex;
-  align-items: center;
   border-top-left-radius: 20px;
 }
 
 .twilight-bar-parent {
-  height: 100%;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
 .twilight-bar {
   position: relative;
   width: 300px;
   height: 140px;
+  transform: scale(1.4);
+  margin-bottom: 20px;
+  pointer-events: none;
 }
 
 .curve {
-  position: absolute;
+  pointer-events: none;
 
   path {
     fill: none;
     stroke: var(--color-crust);
     stroke-width: 4px;
     stroke-linecap: round;
+    pointer-events: stroke;
   }
 }
 
 .twilight-bar-thumb {
+  position: absolute;
+  left: 0;
+  top: 0;
   color: var(--mat-sys-text);
   font-size: 24px;
   offset-path: path('M16,120 C80,20 220,20 284,120');
   offset-rotate: auto;
   offset-distance: 0%;
+  offset-anchor: center;
 }
 
 .twilight-value {
   position: absolute;
   bottom: 10px;
+  font-size: 0.8em;
 }

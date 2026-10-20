@@ -1,11 +1,12 @@
 <div class="twilight-bar-section">
-  <div
-    class="twilight-bar-parent"
-    (pointerdown)="onPointerDown($event)"
-    (pointerup)="onPointerUp($event)"
-    (pointermove)="onPointerMove($event)"
-  >
-    <div #twilightBar class="twilight-bar">
+  <div class="twilight-bar-parent">
+    <div
+      #twilightBar
+      class="twilight-bar"
+      (pointerdown)="onPointerDown($event)"
+      (pointerup)="onPointerUp($event)"
+      (pointermove)="onPointerMove($event)"
+    >
       <svg class="curve" viewBox="0 0 300 140" aria-hidden="true">
         <path d="M16,120 C80,20 220,20 284,120" />
       </svg>

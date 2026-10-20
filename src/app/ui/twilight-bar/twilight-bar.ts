@@ -32,7 +32,7 @@ export class TwilightBar implements OnInit {
   protected isSeeking = false;
 
   protected twilightValueMin = 0.25;
-  protected twilightValueMax = 3;
+  protected twilightValueMax = 2.5;
 
   constructor() {
     this.thumbIcon = computed(() => {
@@ -47,25 +47,20 @@ export class TwilightBar implements OnInit {
   }
 
   ngOnInit() {
-    const valInRange = MathUtils.inverseLerp(
-      this.twilightValueMin,
-      this.twilightValueMax,
-      this.playbackService.playbackRate,
-    );
-    const thumbVal = MathUtils.lerp(0, 100, valInRange);
-    this.thumbPosition.set(thumbVal);
+    this.thumbPosition.set(50);
 
     this.twilightBarValue.set(this.playbackService.playbackRate);
   }
 
   private async setTwilightValue(pos: number) {
-    const maxBarVal = this.twilightBarRef().nativeElement.getBoundingClientRect().width;
+    const valInRange =
+      pos <= 0.5
+        ? MathUtils.lerp(this.twilightValueMin, 1, pos * 2)
+        : MathUtils.lerp(1, this.twilightValueMax, (pos - 0.5) * 2);
 
-    const normalizedVal = MathUtils.inverseLerp(0, maxBarVal, pos);
-    const valInRange = MathUtils.lerp(this.twilightValueMin, this.twilightValueMax, normalizedVal);
     const trimmedValInRange = Number(valInRange.toFixed(2));
 
-    const thumbVal = MathUtils.lerp(0, 100, normalizedVal);
+    const thumbVal = MathUtils.lerp(0, 100, pos);
     this.thumbPosition.set(thumbVal);
 
     this.playbackService.playbackRate = trimmedValInRange;
@@ -75,7 +70,11 @@ export class TwilightBar implements OnInit {
   private calculatePointerPosition(ev: PointerEvent) {
     const rect = this.twilightBarRef().nativeElement.getBoundingClientRect();
 
-    return Math.max(0, Math.min(ev.clientX - rect.left, rect.width));
+    const position = Math.max(0, Math.min(ev.clientX - rect.left, rect.width));
+
+    const normalizedPosition = MathUtils.inverseLerp(0, rect.width, position);
+
+    return normalizedPosition;
   }
 
   protected async onPointerDown(ev: PointerEvent) {
@@ -97,12 +96,31 @@ export class TwilightBar implements OnInit {
 
     this.isPointerDown = false;
     this.isSeeking = false;
+
+    const center = 0.5;
+    const position = this.calculatePointerPosition(ev);
+
+    if (Math.abs(position - center) < 0.01) {
+      await this.setTwilightValue(center);
+    } else {
+      await this.setTwilightValue(position);
+    }
   }
 
   protected async onPointerMove(ev: PointerEvent) {
-    if (this.isPointerDown) {
-      this.isSeeking = true;
-      await this.setTwilightValue(this.calculatePointerPosition(ev));
+    if (!this.isPointerDown) {
+      return;
+    }
+
+    this.isSeeking = true;
+
+    const center = 0.5;
+    const position = this.calculatePointerPosition(ev);
+
+    if (Math.abs(position - center) < 0.01) {
+      await this.setTwilightValue(center);
+    } else {
+      await this.setTwilightValue(position);
     }
   }
 }
