@@ -1,17 +1,20 @@
 @import url('tailwindcss');
+@import url('@fontsource-variable/jetbrains-mono');
 
 body {
   background-color: var(--mat-sys-surface-container-lowest);
   color: var(--mat-sys-secondary);
   line-height: 2.2rem;
+  font-family: 'JetBrains Mono Variable', serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 /* Variables */
 
 :root {
   --top-bar-height: 60px;
-  --twilight-bar-height: 160px;
-  --player-controls-bar-height: 60px;
+  --player-controls-bar-height: 70px;
 
   /* Theming */
 

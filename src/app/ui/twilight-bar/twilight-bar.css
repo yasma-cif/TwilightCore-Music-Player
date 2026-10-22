@@ -1,13 +1,13 @@
 .twilight-bar-section {
   position: fixed;
   background-color: var(--color-crust);
-  height: var(--twilight-bar-height);
+  height: 210px;
+  width: 450px;
   bottom: var(--player-controls-bar-height);
   right: 0;
-  width: 14em;
   z-index: 1000;
-  border-top-left-radius: 250px;
-  border-top-right-radius: 250px;
+  border-top-left-radius: 225px;
+  border-top-right-radius: 225px;
 }
 
 .twilight-bar-parent {
@@ -22,7 +22,7 @@
   position: relative;
   width: 300px;
   height: 140px;
-  transform: scale(1.4);
+  transform: scale(1.5);
   margin-bottom: 20px;
   pointer-events: none;
 }
