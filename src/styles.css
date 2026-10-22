@@ -3,7 +3,7 @@
 
 body {
   background-color: var(--mat-sys-surface-container-lowest);
-  color: var(--mat-sys-secondary);
+  color: var(--text);
   line-height: 2.2rem;
   font-family: 'JetBrains Mono Variable', serif;
   font-weight: 400;
@@ -24,15 +24,18 @@ body {
   );
   --easing: calc(var(--t) * 100%);
 
-  --day-primary: oklch(55% 0.11 71.51deg);
+  --day-primary: #fab387;
   --day-secondary: oklch(38% 0.088 72deg);
   --day-surface: #fff;
-  --day-crust: oklch(29% 0.015 25.79deg);
+  --day-crust: #313244;
 
-  --night-primary: oklch(37% 0.093 322deg);
+  --night-primary: #cba6f7;
   --night-secondary: oklch(13% 0.21 322deg);
   --night-surface: #fff;
-  --night-crust: oklch(19% 0.015 25.79deg);
+  --night-crust: #181825;
+
+  --text: #cdd6f4;
+  --text-on-color: #1e1e2e;
 
   --color-primary: color-mix(
     in display-p3,
@@ -51,10 +54,13 @@ body {
   );
   --color-crust: color-mix(in display-p3, var(--day-crust), var(--night-crust) calc(var(--easing)));
 
+  --color-disabled: #7f849c;
+
   --mat-sys-primary: var(--color-primary);
   --mat-sys-surface: var(--color-crust);
   --mat-sys-surface-variant: var(--color-secondary);
   --mat-sys-primary-container: var(--color-secondary);
   --mat-sys-on-primary: var(--color-secondary);
   --mat-sys-secondary-container: var(--color-crust);
+  --mat-sys-text: var(--color-crust);
 }

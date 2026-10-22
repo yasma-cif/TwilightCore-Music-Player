@@ -31,4 +31,13 @@
   color: var(--mat-sys-text);
   font-size: 18px;
   transform: translateX(50%);
+  display: flex;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  line-height: 1;
 }

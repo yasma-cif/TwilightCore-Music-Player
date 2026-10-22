@@ -41,15 +41,23 @@
 
 .twilight-bar-thumb {
   position: absolute;
+  display: flex;
   left: 0;
   top: 0;
-  color: var(--mat-sys-text);
+  width: 30px;
+  height: 30px;
+  color: var(--color-crust);
   font-size: 24px;
   offset-path: path('M16,120 C80,20 220,20 284,120');
   offset-rotate: auto;
   offset-distance: 0%;
   offset-anchor: center;
   pointer-events: auto;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  background-color: var(--color-primary);
+  border-radius: 50%;
 }
 
 .twilight-value {
@@ -64,7 +72,7 @@
   top: 0;
   offset-path: path('M16,120 C80,20 220,20 284,120');
   offset-distance: 50%;
-  border-left: solid 3px rgb(218 191 210);
-  border-radius: 15%;
-  height: 16px;
+  border-left: solid 3px var(--text);
+  border-radius: 25%;
+  height: 18px;
 }
