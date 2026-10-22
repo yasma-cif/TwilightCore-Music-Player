@@ -8,8 +8,22 @@
       (pointermove)="onPointerMove($event)"
     >
       <svg class="curve" viewBox="0 0 300 140" aria-hidden="true">
+        <defs>
+          <linearGradient
+            id="curve-gradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="0%"
+            color-interpolation="oklch"
+          >
+            <stop offset="0%" stop-color="oklch(55% 0.11 71.51deg)" />
+            <stop offset="100%" stop-color="oklch(37% 0.093 322deg)" />
+          </linearGradient>
+        </defs>
         <path d="M16,120 C80,20 220,20 284,120" />
       </svg>
+      <div class="centered-line"></div>
       <i
         class="twilight-bar-thumb fas"
         [class]="thumbIcon()"

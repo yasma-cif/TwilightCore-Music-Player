@@ -1,12 +1,13 @@
 .twilight-bar-section {
   position: fixed;
-  background-color: var(--color-primary);
+  background-color: var(--color-crust);
   height: var(--twilight-bar-height);
   bottom: var(--player-controls-bar-height);
   right: 0;
   width: 14em;
   z-index: 1000;
-  border-top-left-radius: 20px;
+  border-top-left-radius: 250px;
+  border-top-right-radius: 250px;
 }
 
 .twilight-bar-parent {
@@ -31,8 +32,8 @@
 
   path {
     fill: none;
-    stroke: var(--color-crust);
-    stroke-width: 4px;
+    stroke: url('#curve-gradient');
+    stroke-width: 6px;
     stroke-linecap: round;
     pointer-events: stroke;
   }
@@ -48,10 +49,22 @@
   offset-rotate: auto;
   offset-distance: 0%;
   offset-anchor: center;
+  pointer-events: auto;
 }
 
 .twilight-value {
   position: absolute;
   bottom: 10px;
   font-size: 0.8em;
+}
+
+.centered-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  offset-path: path('M16,120 C80,20 220,20 284,120');
+  offset-distance: 50%;
+  border-left: solid 3px rgb(218 191 210);
+  border-radius: 15%;
+  height: 16px;
 }
