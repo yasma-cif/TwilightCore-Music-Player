@@ -1,6 +1,6 @@
 .top-bar {
   position: fixed;
-  background-color: var(--mat-sys-secondary-container);
+  background-color: var(--color-crust);
   height: var(--top-bar-height);
   top: 0;
   left: 0;
@@ -25,4 +25,14 @@
 .top-bar-end {
   display: flex;
   justify-self: end;
+}
+
+.logo {
+  width: 1.3em;
+  margin: 0 12px 0 4px;
+}
+
+.title {
+  width: 1em;
+  margin: 0;
 }

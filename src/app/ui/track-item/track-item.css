@@ -13,6 +13,10 @@
   color: var(--text);
 }
 
+.track-number {
+  margin-left: 10px;
+}
+
 .track-item-info {
   display: flex;
   flex-direction: column;
@@ -20,6 +24,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-left: 16px;
 }
 
 .track-item-duration {

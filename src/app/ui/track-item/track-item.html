@@ -1,6 +1,6 @@
 <button class="track-item" (click)="playTrack()">
-  <div class="ml-4">{{ trackNumber() }}.</div>
-  <div class="track-item-info ml-4">
+  <div class="track-number">{{ trackNumber() }}.</div>
+  <div class="track-item-info">
     <p>{{ track().title }}</p>
     @if (track().artist) {
       <p>{{ track().artist }}</p>

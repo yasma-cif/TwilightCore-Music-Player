@@ -1,7 +1,7 @@
 .track-menu {
   display: flex;
   width: 100%;
-  background-color: var(--mat-sys-secondary-container);
+  background-color: var(--color-crust);
   align-items: center;
 }
 

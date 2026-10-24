@@ -16,19 +16,19 @@
   align-items: center;
   width: 100%;
   height: 4px;
-  background: var(--mat-sys-secondary);
+  background: var(--text);
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: var(--mat-sys-primary);
+  background: var(--color-primary);
   align-items: center;
   justify-content: end;
   display: flex;
 }
 
 .progress-bar-thumb {
-  color: var(--mat-sys-text);
+  color: var(--color-crust);
   font-size: 18px;
   transform: translateX(50%);
   display: flex;
