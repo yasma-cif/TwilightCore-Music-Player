@@ -25,6 +25,11 @@
   transform: scale(1.5);
   margin-bottom: 20px;
   pointer-events: none;
+  cursor: pointer;
+
+  &.grabbing {
+    cursor: grabbing;
+  }
 }
 
 .curve {
@@ -58,6 +63,11 @@
   line-height: 1;
   background-color: var(--color-primary);
   border-radius: 50%;
+  cursor: grab;
+
+  &.grabbing {
+    cursor: grabbing;
+  }
 }
 
 .twilight-value {

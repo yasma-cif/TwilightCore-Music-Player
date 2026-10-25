@@ -6,10 +6,10 @@ import { TrackMenuStateService } from '../../services/track-menu-state/track-men
 
 @Component({
   imports: [MatSidenavModule, Visualizer, TrackMenu],
-  selector: 'tw-app-content',
-  styleUrl: './app-content.css',
-  templateUrl: './app-content.html',
+  selector: 'tw-app-inner',
+  styleUrl: './app-inner.css',
+  templateUrl: './app-inner.html',
 })
-export class AppContent {
+export class AppInner {
   protected readonly sidemenuState = inject(TrackMenuStateService);
 }

@@ -57,11 +57,4 @@ body {
   --color-text-on-color: oklch(24.3% 0.03 283.911deg);
 
   --color-disabled: oklch(61.8% 0.037 276.005deg);
-
-  --mat-sys-primary: var(--color-primary);
-  --mat-sys-surface: var(--color-crust);
-  --mat-sys-surface-variant: var(--color-secondary);
-  --mat-sys-primary-container: var(--color-secondary);
-  --mat-sys-on-primary: var(--color-secondary);
-  --mat-sys-secondary-container: var(--color-crust);
 }

@@ -9,6 +9,10 @@
   right: 0;
   transform: translateY(-50%);
   cursor: pointer;
+
+  &.grabbing {
+    cursor: grabbing;
+  }
 }
 
 .progress-bar {
@@ -25,19 +29,38 @@
   align-items: center;
   justify-content: end;
   display: flex;
+  transition: 0s;
+
+  &.expanded {
+    height: 200%;
+    transition: 80ms;
+  }
 }
 
 .progress-bar-thumb {
+  width: 0;
+  height: 0;
   color: var(--color-crust);
-  font-size: 18px;
+  font-size: 0;
   transform: translateX(50%);
   display: flex;
-  width: 24px;
-  height: 24px;
   background-color: var(--color-primary);
   border-radius: 50%;
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
   line-height: 1;
+  transition: 0s;
+  cursor: grab;
+
+  &.expanded {
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+    transition: 80ms;
+  }
+
+  &.grabbing {
+    cursor: grabbing;
+  }
 }

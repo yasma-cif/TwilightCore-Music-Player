@@ -1,5 +1,6 @@
 <div
   class="progress-bar-parent"
+  [class.grabbing]="isGrabbing()"
   (pointerdown)="onPointerDown($event)"
   (pointerup)="onPointerUp($event)"
   (pointermove)="onPointerMove($event)"
@@ -10,11 +11,13 @@
     <div
       class="progress-bar-fill"
       [style.width.%]="progressBarValue()"
-      [style.height.px]="progressBarHeight()"
+      [class.expanded]="progressBarExpanded()"
     >
-      @if (showThumb()) {
-        <i class="progress-bar-thumb fas fa-circle"></i>
-      }
+      <i
+        class="progress-bar-thumb fas fa-circle"
+        [class.expanded]="showThumb()"
+        [class.grabbing]="isGrabbing()"
+      ></i>
     </div>
   </div>
 </div>

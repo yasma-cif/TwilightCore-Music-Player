@@ -3,6 +3,7 @@
     <div
       #twilightBar
       class="twilight-bar"
+      [class.grabbing]="isGrabbing()"
       (pointerdown)="onPointerDown($event)"
       (pointerup)="onPointerUp($event)"
       (pointermove)="onPointerMove($event)"
@@ -27,6 +28,7 @@
       <i
         class="twilight-bar-thumb fas"
         [class]="thumbIcon()"
+        [class.grabbing]="isGrabbing()"
         [style.offset-distance.%]="thumbPosition()"
       ></i>
     </div>

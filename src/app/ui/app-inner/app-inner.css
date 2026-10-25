@@ -1,0 +1,21 @@
+.main-app {
+  display: flex;
+  height: 100dvh;
+  padding-top: var(--top-bar-height);
+  padding-bottom: var(--player-controls-bar-height);
+}
+
+.side-menu-drawer {
+  width: 0;
+  opacity: 0;
+  overflow: hidden auto;
+
+  transition:
+    width 200ms ease,
+    opacity 200ms ease;
+
+  &.open {
+    width: clamp(12rem, 36vw, 30rem);
+    opacity: 1;
+  }
+}

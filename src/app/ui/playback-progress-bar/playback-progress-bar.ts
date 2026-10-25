@@ -16,7 +16,8 @@ export class PlaybackProgressBar implements OnInit {
 
   protected readonly progressBarValue = signal(0);
   protected readonly showThumb = signal(false);
-  protected readonly progressBarHeight = signal(4);
+  protected readonly progressBarExpanded = signal(false);
+  protected readonly isGrabbing = signal(false);
 
   protected isPointerDown = false;
   protected isSeeking = false;
@@ -48,13 +49,20 @@ export class PlaybackProgressBar implements OnInit {
 
   protected async onPointerDown(ev: PointerEvent) {
     this.isPointerDown = true;
+    this.isGrabbing.set(true);
 
     (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
 
-    await this.seekByPercentage(this.calculatePointerPosition(ev));
+    const position = this.calculatePointerPosition(ev);
 
-    if (!this.playbackService.isPlaying()) {
-      await this.playbackService.playAudio();
+    const currentPosition =
+      (this.progressBarRef().nativeElement.offsetWidth * this.progressBarValue()) / 100;
+    if (Math.abs(position - currentPosition) > 14) {
+      await this.seekByPercentage(position);
+
+      if (!this.playbackService.isPlaying()) {
+        await this.playbackService.playAudio();
+      }
     }
   }
 
@@ -65,6 +73,7 @@ export class PlaybackProgressBar implements OnInit {
 
     this.isPointerDown = false;
     this.isSeeking = false;
+    this.isGrabbing.set(false);
   }
 
   protected async onPointerMove(ev: PointerEvent) {
@@ -76,12 +85,12 @@ export class PlaybackProgressBar implements OnInit {
   }
 
   protected onPointerEnter() {
-    this.progressBarHeight.set(8);
+    this.progressBarExpanded.set(true);
     this.showThumb.set(true);
   }
 
   protected onPointerLeave() {
-    this.progressBarHeight.set(4);
+    this.progressBarExpanded.set(false);
     this.showThumb.set(false);
   }
 }

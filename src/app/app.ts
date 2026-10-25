@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { PlayerControlsBar } from './ui/player-controls-bar/player-controls-bar';
 import { TopBar } from './ui/top-bar/top-bar';
-import { AppContent } from './ui/app-content/app-content';
+import { PlayerControlsBar } from './ui/player-controls-bar/player-controls-bar';
+import { AppInner } from './ui/app-inner/app-inner';
 
 @Component({
   selector: 'tw-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
-  imports: [PlayerControlsBar, TopBar, AppContent],
+  imports: [TopBar, PlayerControlsBar, AppInner],
 })
 export class App {}

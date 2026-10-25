@@ -27,6 +27,7 @@ export class TwilightBar implements OnInit {
   protected readonly twilightBarValue = signal(1);
   protected readonly thumbPosition = signal(0);
   protected readonly thumbIcon: Signal<string>;
+  protected readonly isGrabbing = signal(false);
 
   protected isPointerDown = false;
   protected isSeeking = false;
@@ -79,13 +80,18 @@ export class TwilightBar implements OnInit {
 
   protected async onPointerDown(ev: PointerEvent) {
     this.isPointerDown = true;
+    this.isGrabbing.set(true);
 
     (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
 
-    await this.setTwilightValue(this.calculatePointerPosition(ev));
+    const position = this.calculatePointerPosition(ev);
 
-    if (!this.playbackService.isPlaying()) {
-      await this.playbackService.playAudio();
+    if (Math.abs(position - this.thumbPosition() / 100) > 0.05) {
+      await this.setTwilightValue(position);
+
+      if (!this.playbackService.isPlaying()) {
+        await this.playbackService.playAudio();
+      }
     }
   }
 
@@ -96,14 +102,17 @@ export class TwilightBar implements OnInit {
 
     this.isPointerDown = false;
     this.isSeeking = false;
+    this.isGrabbing.set(false);
 
     const center = 0.5;
     const position = this.calculatePointerPosition(ev);
 
-    if (Math.abs(position - center) < 0.01) {
-      await this.setTwilightValue(center);
-    } else {
-      await this.setTwilightValue(position);
+    if (Math.abs(position - this.thumbPosition() / 100) > 0.05) {
+      if (Math.abs(position - center) < 0.01) {
+        await this.setTwilightValue(center);
+      } else {
+        await this.setTwilightValue(position);
+      }
     }
   }
 
