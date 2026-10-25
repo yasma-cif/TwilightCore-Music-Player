@@ -72,7 +72,7 @@
   top: 0;
   offset-path: path('M16,120 C80,20 220,20 284,120');
   offset-distance: 50%;
-  border-left: solid 3px var(--text);
+  border-left: solid 3px var(--color-text);
   border-radius: 25%;
   height: 18px;
 }

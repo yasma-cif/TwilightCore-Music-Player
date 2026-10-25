@@ -3,59 +3,60 @@
 
 body {
   background-color: var(--color-crust);
-  color: var(--text);
-  font-family: 'JetBrains Mono Variable', serif;
-  font-size: 2rem;
+  color: var(--color-text);
+  font-family: 'JetBrains Mono Variable', monospace;
   font-weight: 400;
   font-style: normal;
-  line-height: 1.2em;
+  line-height: 1.5;
 }
 
-/* Variables */
-
 :root {
-  --top-bar-height: 60px;
-  --player-controls-bar-height: 70px;
+  font-size: 2rem;
+  --top-bar-height: 2.2rem;
+  --player-controls-bar-height: 2.2rem;
 
   /* Theming */
 
   --t: 0;
-  --easing-strong: calc(
-    50% + 50% * sign(var(--t) - 0.5) * (1 - pow(1 - 2 * abs(var(--t) - 0.5), 8))
+  --easing-circ: calc(
+    50% + 50% * sign(var(--t) - 0.5) * sqrt(1 - pow(1 - 2 * abs(var(--t) - 0.5), 2))
   );
-  --easing: calc(var(--t) * 100%);
 
-  --day-primary: #fab387;
-  --day-secondary: oklch(38% 0.088 72deg);
-  --day-surface: #fff;
-  --day-crust: #313244;
+  --day-primary: oklch(82.4% 0.101 52.629deg);
+  --day-secondary: oklch(52.4% 0.101 52.629deg);
+  --day-surface: oklch(55% 0.034 277.095deg);
+  --day-crust: oklch(32.4% 0.032 281.978deg);
 
-  --night-primary: #cba6f7;
-  --night-secondary: oklch(13% 0.21 322deg);
-  --night-surface: #fff;
-  --night-crust: #181825;
-
-  --text: #cdd6f4;
-  --text-on-color: #1e1e2e;
+  --night-primary: oklch(78.7% 0.119 304.769deg);
+  --night-secondary: oklch(38.7% 0.119 304.769deg);
+  --night-surface: oklch(40.4% 0.032 280.152deg);
+  --night-crust: oklch(21.6% 0.025 284.065deg);
 
   --color-primary: color-mix(
     in display-p3,
     var(--day-primary),
-    var(--night-primary) calc(var(--easing))
+    var(--night-primary) calc(var(--easing-circ))
   );
   --color-secondary: color-mix(
     in display-p3,
     var(--day-secondary),
-    var(--night-secondary) calc(var(--easing))
+    var(--night-secondary) calc(var(--easing-circ))
   );
   --color-surface: color-mix(
     in display-p3,
     var(--day-surface),
-    var(--night-surface) calc(var(--easing))
+    var(--night-surface) calc(var(--easing-circ))
   );
-  --color-crust: color-mix(in display-p3, var(--day-crust), var(--night-crust) calc(var(--easing)));
+  --color-crust: color-mix(
+    in display-p3,
+    var(--day-crust),
+    var(--night-crust) calc(var(--easing-circ))
+  );
 
-  --color-disabled: #7f849c;
+  --color-text: oklch(87.9% 0.043 272.277deg);
+  --color-text-on-color: oklch(24.3% 0.03 283.911deg);
+
+  --color-disabled: oklch(61.8% 0.037 276.005deg);
 
   --mat-sys-primary: var(--color-primary);
   --mat-sys-surface: var(--color-crust);
@@ -63,5 +64,4 @@ body {
   --mat-sys-primary-container: var(--color-secondary);
   --mat-sys-on-primary: var(--color-secondary);
   --mat-sys-secondary-container: var(--color-crust);
-  --mat-sys-text: var(--color-crust);
 }
