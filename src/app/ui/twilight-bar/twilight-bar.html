@@ -26,11 +26,12 @@
       </svg>
       <div class="centered-line"></div>
       <i
-        class="twilight-bar-thumb fas"
-        [class]="thumbIcon()"
+        class="twilight-bar-thumb"
         [class.grabbing]="isGrabbing()"
         [style.offset-distance.%]="thumbPosition()"
-      ></i>
+        [style.--icon]="'url(' + thumbIcon() + ')'"
+      >
+      </i>
     </div>
     <p class="twilight-value">x{{ twilightBarValue() | number: '.2' }}</p>
   </div>

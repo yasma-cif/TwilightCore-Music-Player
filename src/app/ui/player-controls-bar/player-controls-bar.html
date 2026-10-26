@@ -5,29 +5,29 @@
   <tw-playback-progress-bar />
   <div class="player-controls">
     <div class="player-controls-start">
-      <button matIconButton class="player-controls-button" (click)="sideMenuState.toggleSideMenu()">
+      <button class="player-controls-button" (click)="sideMenuState.toggleSideMenu()">
         <i class="fas fa-bars" [class.disabled-icon]="!sideMenuState.isOpen()"></i>
       </button>
-      <button matIconButton class="player-controls-button" (click)="switchRepeatMode()">
+      <button class="player-controls-button" (click)="switchRepeatMode()">
         <i class="fas fad" [class]="repeatIcon()"></i>
       </button>
-      <button matIconButton class="player-controls-button">
+      <button class="player-controls-button">
         <i class="fas fa-random disabled-icon"></i>
       </button>
     </div>
 
     <div class="player-controls-center">
-      <button matIconButton class="player-controls-button" (click)="playPrevious()">
+      <button class="player-controls-button" (click)="playPrevious()">
         <i class="fas fa-backward-step"></i>
       </button>
-      <button matIconButton class="player-controls-button-play" (click)="playAudio()">
+      <button class="player-controls-button play-button" (click)="playAudio()">
         @if (isPlaying()) {
-          <mat-icon class="fas fa-pause text-2xl" />
+          <i class="fas fa-pause"></i>
         } @else {
-          <mat-icon class="fas fa-play text-2xl" />
+          <i class="fas fa-play"></i>
         }
       </button>
-      <button matIconButton class="player-controls-button" (click)="playNext()">
+      <button class="player-controls-button" (click)="playNext()">
         <i class="fas fa-forward-step"></i>
       </button>
     </div>
@@ -41,11 +41,16 @@
           </p>
         }
       </div>
-      <button matIconButton class="player-controls-button">
+      <button class="player-controls-button">
         <i class="fas fa-volume disabled-icon"></i>
       </button>
-      <button matIconButton class="player-controls-button" (click)="toggleTwilightBar()">
-        <i class="fas fa-moon"></i>
+      <button class="player-controls-button" (click)="toggleTwilightBar()">
+        <i
+          class="twilight-icon"
+          [style.--icon]="'url(icons/twilight.svg)'"
+          [class.disabled-icon]="showTwilightBar()"
+        >
+        </i>
       </button>
     </div>
   </div>

@@ -68,6 +68,14 @@
   &.grabbing {
     cursor: grabbing;
   }
+
+  &::before {
+    content: '';
+    width: 30px;
+    height: 30px;
+    background-color: var(--color-crust);
+    mask: var(--icon) center / contain no-repeat;
+  }
 }
 
 .twilight-value {

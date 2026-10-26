@@ -1,6 +1,4 @@
 import { Component, computed, inject, signal, Signal, OnInit } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 import { PlaybackProgressBar } from '../playback-progress-bar/playback-progress-bar';
 import { PlaybackService } from '../../services/playback/playback.service';
 import { TwilightBar } from '../twilight-bar/twilight-bar';
@@ -9,7 +7,7 @@ import { TrackMenuStateService } from '../../services/track-menu-state/track-men
 import { DatePipe } from '@angular/common';
 
 @Component({
-  imports: [MatButtonModule, MatIconModule, PlaybackProgressBar, TwilightBar, DatePipe],
+  imports: [PlaybackProgressBar, TwilightBar, DatePipe],
   selector: 'tw-player-controls-bar',
   styleUrl: './player-controls-bar.css',
   templateUrl: './player-controls-bar.html',

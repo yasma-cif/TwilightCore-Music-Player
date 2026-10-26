@@ -38,11 +38,11 @@ export class TwilightBar implements OnInit {
   constructor() {
     this.thumbIcon = computed(() => {
       if (this.twilightBarValue() > 1) {
-        return 'fa-moon';
+        return 'icons/moon.svg';
       } else if (this.twilightBarValue() < 1) {
-        return 'fa-sun';
+        return 'icons/sun.svg';
       } else {
-        return 'fa-circle';
+        return 'icons/twilight.svg';
       }
     });
   }
@@ -96,24 +96,20 @@ export class TwilightBar implements OnInit {
   }
 
   protected async onPointerUp(ev: PointerEvent) {
-    if (this.isSeeking) {
-      await this.setTwilightValue(this.calculatePointerPosition(ev));
-    }
-
-    this.isPointerDown = false;
-    this.isSeeking = false;
-    this.isGrabbing.set(false);
-
     const center = 0.5;
     const position = this.calculatePointerPosition(ev);
 
-    if (Math.abs(position - this.thumbPosition() / 100) > 0.05) {
+    if (Math.abs(position - this.thumbPosition() / 100) > 0.05 && this.isSeeking) {
       if (Math.abs(position - center) < 0.01) {
         await this.setTwilightValue(center);
       } else {
         await this.setTwilightValue(position);
       }
     }
+
+    this.isPointerDown = false;
+    this.isSeeking = false;
+    this.isGrabbing.set(false);
   }
 
   protected async onPointerMove(ev: PointerEvent) {

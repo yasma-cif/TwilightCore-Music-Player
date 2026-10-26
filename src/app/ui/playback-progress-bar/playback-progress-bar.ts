@@ -1,9 +1,7 @@
 import { Component, inject, signal, OnInit, viewChild, ElementRef } from '@angular/core';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PlaybackService } from '../../services/playback/playback.service';
 
 @Component({
-  imports: [MatProgressBarModule],
   selector: 'tw-playback-progress-bar',
   styleUrl: './playback-progress-bar.css',
   templateUrl: './playback-progress-bar.html',
