@@ -1,7 +1,6 @@
 import { inject, Service } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { PlaybackService } from '../playback/playback.service';
-import { Vector3 } from 'three';
 import { PlaybackEvent } from '../playback/playback-event';
 
 @Service()
@@ -14,8 +13,8 @@ export class AudioAnalyserService {
   private analyser!: AnalyserNode;
   private source!: MediaElementAudioSourceNode;
 
-  private readonly peakSubject = new Subject<Vector3>();
-  public readonly peak$: Observable<Vector3> = this.peakSubject.asObservable();
+  private readonly peakSubject = new Subject<Array<number>>();
+  public readonly peak$: Observable<Array<number>> = this.peakSubject.asObservable();
 
   constructor() {
     this.audioCtx = new AudioContext();
@@ -66,7 +65,7 @@ export class AudioAnalyserService {
       const highsAverage =
         highsArray.reduce((sum, value) => sum + value, 0) / (highsArray.length * 255);
 
-      const newVector = new Vector3(lowsAverage, midsAverage, highsAverage);
+      const newVector = new Array<number>(lowsAverage, midsAverage, highsAverage);
 
       this.peakSubject.next(newVector);
 

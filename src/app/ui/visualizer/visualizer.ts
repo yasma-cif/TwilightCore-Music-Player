@@ -76,9 +76,9 @@ export class Visualizer implements OnDestroy {
 
     this.audioAnalyserService.peak$.subscribe((val) => {
       gsap.to(this.cube.scale, {
-        x: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val.x)),
-        y: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val.y)),
-        z: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val.z)),
+        x: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val[0])),
+        y: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val[1])),
+        z: 1 + Math.max(0, MathUtils.inverseLerp(0.3, 0.6, val[2])),
         duration: 0.1,
       });
     });

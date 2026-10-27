@@ -11,8 +11,8 @@
       <button class="player-controls-button" (click)="switchRepeatMode()">
         <i class="fas fad" [class]="repeatIcon()"></i>
       </button>
-      <button class="player-controls-button">
-        <i class="fas fa-random disabled-icon"></i>
+      <button class="player-controls-button" (click)="switchShuffleMode()">
+        <i class="fas fa-random" [class]="shuffleIcon()"></i>
       </button>
     </div>
 

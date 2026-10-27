@@ -1,6 +1,7 @@
 import { inject, Service, signal, WritableSignal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { PlaybackRepeatMode } from './playback-repeat-mode';
+import { PlaybackShuffleMode } from './playback-shuffle-mode';
 import { PlaybackEvent } from './playback-event';
 import { PlaylistService } from '../playlist/playlist.service';
 
@@ -13,6 +14,7 @@ export class PlaybackService {
   public readonly isPlaying = signal(false);
 
   private readonly _repeatMode: WritableSignal<PlaybackRepeatMode>;
+  private readonly _shuffleMode: WritableSignal<PlaybackShuffleMode>;
 
   private readonly playbackEventSubject = new Subject<PlaybackEvent>();
   public readonly playbackEvent$: Observable<PlaybackEvent> =
@@ -64,6 +66,14 @@ export class PlaybackService {
     this._repeatMode.set(mode);
   }
 
+  public get shuffleMode(): PlaybackShuffleMode {
+    return this._shuffleMode();
+  }
+
+  public set shuffleMode(mode: PlaybackShuffleMode) {
+    this._shuffleMode.set(mode);
+  }
+
   public constructor() {
     this.audioElement = new Audio();
     this.audioElement.preservesPitch = false;
@@ -73,6 +83,7 @@ export class PlaybackService {
     });
 
     this._repeatMode = signal(PlaybackRepeatMode.RepeatCategory);
+    this._shuffleMode = signal(PlaybackShuffleMode.None);
 
     this.audioElement.ontimeupdate = (ev) => {
       this.timeUpdateSubject.next(ev);
@@ -114,7 +125,11 @@ export class PlaybackService {
         this.isPlaying.set(false);
         break;
       case PlaybackRepeatMode.RepeatCategory:
-        await this.playNext();
+        if (this._shuffleMode() === PlaybackShuffleMode.None) {
+          await this.playNext();
+        } else if (this._shuffleMode() === PlaybackShuffleMode.ShuffleAll) {
+          await this.playRandom();
+        }
         break;
       case PlaybackRepeatMode.RepeatSong:
         this.setupNewTrack(
@@ -156,6 +171,12 @@ export class PlaybackService {
 
   public async playByNumber(num: number) {
     this._playlistService.playByNumber(num);
+    this.setupNewTrack(this._playlistService.currentTrack()!.url);
+    await this.playAudio();
+  }
+
+  public async playRandom() {
+    this._playlistService.playRandom();
     this.setupNewTrack(this._playlistService.currentTrack()!.url);
     await this.playAudio();
   }

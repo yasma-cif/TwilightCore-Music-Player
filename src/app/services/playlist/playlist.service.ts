@@ -115,4 +115,12 @@ export class PlaylistService {
 
     this._currentTrack.set(this._currentPlaylist()[this.currentTrackNum]);
   }
+
+  public playRandom() {
+    const num = Math.floor(Math.random() * this._currentPlaylist().length);
+
+    this.currentTrackNum = num;
+
+    this._currentTrack.set(this._currentPlaylist()[this.currentTrackNum]);
+  }
 }

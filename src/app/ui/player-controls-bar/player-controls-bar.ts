@@ -5,6 +5,7 @@ import { TwilightBar } from '../twilight-bar/twilight-bar';
 import { PlaybackRepeatMode } from '../../services/playback/playback-repeat-mode';
 import { TrackMenuStateService } from '../../services/track-menu-state/track-menu-state';
 import { DatePipe } from '@angular/common';
+import { PlaybackShuffleMode } from '../../services/playback/playback-shuffle-mode';
 
 @Component({
   imports: [PlaybackProgressBar, TwilightBar, DatePipe],
@@ -20,6 +21,7 @@ export class PlayerControlsBar implements OnInit {
   protected readonly showTwilightBar = signal(true);
 
   protected readonly repeatIcon = computed(() => this.setRepeatIcon());
+  protected readonly shuffleIcon = computed(() => this.setShuffleIcon());
 
   protected readonly trackProgress = signal(0);
   protected readonly trackDuration = signal(0);
@@ -56,7 +58,6 @@ export class PlayerControlsBar implements OnInit {
   protected switchRepeatMode() {
     this.playbackService.repeatMode =
       (this.playbackService.repeatMode + 1) % (Object.keys(PlaybackRepeatMode).length / 2);
-    console.log(this.playbackService.repeatMode);
   }
 
   private setRepeatIcon() {
@@ -67,6 +68,20 @@ export class PlayerControlsBar implements OnInit {
         return 'fa-repeat';
       case PlaybackRepeatMode.RepeatSong:
         return 'fa-1';
+    }
+  }
+
+  protected switchShuffleMode() {
+    this.playbackService.shuffleMode =
+      (this.playbackService.shuffleMode + 1) % (Object.keys(PlaybackShuffleMode).length / 2);
+  }
+
+  private setShuffleIcon() {
+    switch (this.playbackService.shuffleMode) {
+      case PlaybackShuffleMode.None:
+        return 'fa-random disabled-icon';
+      case PlaybackShuffleMode.ShuffleAll:
+        return 'fa-random';
     }
   }
 }
