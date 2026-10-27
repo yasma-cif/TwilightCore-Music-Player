@@ -5,23 +5,20 @@ import { PlaybackEvent } from '../playback/playback-event';
 
 @Service()
 export class AudioAnalyserService {
-  private playbackService = inject(PlaybackService);
+  private readonly playbackService = inject(PlaybackService);
 
-  private audioElement!: HTMLAudioElement;
-
-  private audioCtx!: AudioContext;
-  private analyser!: AnalyserNode;
-  private source!: MediaElementAudioSourceNode;
+  private readonly audioCtx: AudioContext;
+  private readonly analyser: AnalyserNode;
+  private readonly source: MediaElementAudioSourceNode;
 
   private readonly peakSubject = new Subject<Array<number>>();
+
   public readonly peak$: Observable<Array<number>> = this.peakSubject.asObservable();
 
   constructor() {
     this.audioCtx = new AudioContext();
     this.analyser = this.audioCtx.createAnalyser();
-
-    this.audioElement = this.playbackService.activeAudioElement;
-    this.source = this.audioCtx.createMediaElementSource(this.audioElement);
+    this.source = this.audioCtx.createMediaElementSource(this.playbackService.activeAudioElement);
 
     this.source.connect(this.analyser);
     this.analyser.connect(this.audioCtx.destination);
@@ -43,7 +40,7 @@ export class AudioAnalyserService {
     const dataArray = new Uint8Array(this.analyser.frequencyBinCount);
 
     const analyse = () => {
-      if (this.audioElement.paused) {
+      if (!this.playbackService.isPlaying()) {
         return;
       }
 

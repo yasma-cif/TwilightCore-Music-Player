@@ -1,4 +1,4 @@
-import { inject, Service, signal, WritableSignal } from '@angular/core';
+import { inject, Service, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { PlaybackRepeatMode } from './playback-repeat-mode';
 import { PlaybackShuffleMode } from './playback-shuffle-mode';
@@ -7,14 +7,17 @@ import { PlaylistService } from '../playlist/playlist.service';
 
 @Service()
 export class PlaybackService {
-  private readonly _playlistService = inject(PlaylistService);
+  private readonly playlistService = inject(PlaylistService);
 
-  private audioElement!: HTMLAudioElement;
+  private readonly audioElement: HTMLAudioElement;
 
   public readonly isPlaying = signal(false);
 
-  private readonly _repeatMode: WritableSignal<PlaybackRepeatMode>;
-  private readonly _shuffleMode: WritableSignal<PlaybackShuffleMode>;
+  private readonly _repeatMode = signal(PlaybackRepeatMode.RepeatCategory);
+  public readonly repeatMode = this._repeatMode.asReadonly();
+
+  private readonly _shuffleMode = signal(PlaybackShuffleMode.None);
+  public readonly shuffleMode = this._shuffleMode.asReadonly();
 
   private readonly playbackEventSubject = new Subject<PlaybackEvent>();
   public readonly playbackEvent$: Observable<PlaybackEvent> =
@@ -38,7 +41,6 @@ export class PlaybackService {
   public set playbackRate(val: number) {
     this.audioElement.playbackRate = val;
 
-    this.TEST_setUIColor();
     this.playbackRateChangeSubject.next(this.audioElement.playbackRate);
   }
 
@@ -58,22 +60,6 @@ export class PlaybackService {
     this.audioElement.currentTime = (percent * this.audioElement.duration) / 100;
   }
 
-  public get repeatMode(): PlaybackRepeatMode {
-    return this._repeatMode();
-  }
-
-  public set repeatMode(mode: PlaybackRepeatMode) {
-    this._repeatMode.set(mode);
-  }
-
-  public get shuffleMode(): PlaybackShuffleMode {
-    return this._shuffleMode();
-  }
-
-  public set shuffleMode(mode: PlaybackShuffleMode) {
-    this._shuffleMode.set(mode);
-  }
-
   public constructor() {
     this.audioElement = new Audio();
     this.audioElement.preservesPitch = false;
@@ -82,38 +68,36 @@ export class PlaybackService {
       await this.onFinishPlaying();
     });
 
-    this._repeatMode = signal(PlaybackRepeatMode.RepeatCategory);
-    this._shuffleMode = signal(PlaybackShuffleMode.None);
-
     this.audioElement.ontimeupdate = (ev) => {
       this.timeUpdateSubject.next(ev);
     };
 
-    this.TEST_setUIColor();
     void this.initializeFirstTrack();
   }
 
   private async initializeFirstTrack() {
-    await this._playlistService.ready;
+    await this.playlistService.ready;
 
-    this.setupNewTrack(
-      this._playlistService.currentPlaylist()[this._playlistService.currentTrackNum].url,
-    );
+    this.setupNewTrack(this.playlistService.currentPlaylist()[0].url);
   }
 
-  public setupNewTrack(newAudio: string) {
+  public setupNewTrack(newTrack: string) {
     const oldPlaybackRate = this.playbackRate;
-    this.audioElement.src = newAudio;
+    this.audioElement.src = newTrack;
     this.audioElement.playbackRate = oldPlaybackRate;
   }
 
   public async playAudio() {
+    if (!this.audioElement.src) {
+      return;
+    }
+
     if (this.audioElement.paused) {
-      this.playbackEventSubject.next({ type: 'played', track: this.audioElement });
+      this.playbackEventSubject.next({ type: 'played' });
       this.isPlaying.set(true);
       await this.audioElement.play();
     } else {
-      this.playbackEventSubject.next({ type: 'paused', track: this.audioElement });
+      this.playbackEventSubject.next({ type: 'paused' });
       this.isPlaying.set(false);
       this.audioElement.pause();
     }
@@ -123,6 +107,7 @@ export class PlaybackService {
     switch (this._repeatMode()) {
       case PlaybackRepeatMode.None:
         this.isPlaying.set(false);
+        this.progressPercentage = 0;
         break;
       case PlaybackRepeatMode.RepeatCategory:
         if (this._shuffleMode() === PlaybackShuffleMode.None) {
@@ -132,52 +117,42 @@ export class PlaybackService {
         }
         break;
       case PlaybackRepeatMode.RepeatSong:
-        this.setupNewTrack(
-          this._playlistService.currentPlaylist()[this._playlistService.currentTrackNum].url,
-        );
-        await this.playAudio();
+        await this.playByNumber(this.playlistService.currentTrackNum());
         break;
     }
   };
 
-  private TEST_setUIColor() {
-    const MIN = 0.25;
-    const MAX = 3;
-    const EASE = 1;
-    const CENTER = 1;
-
-    const r = Math.min(MAX, Math.max(MIN, this.audioElement.playbackRate));
-    const x =
-      r <= CENTER
-        ? (0.5 * (r - MIN)) / (CENTER - MIN)
-        : 0.5 + (0.5 * (r - CENTER)) / (MAX - CENTER);
-
-    const a = Math.pow(x, EASE);
-    const b = Math.pow(1 - x, EASE);
-    document.documentElement.style.setProperty('--t', String(a / (a + b)));
-  }
-
   public async playNext() {
-    this._playlistService.playNext();
-    this.setupNewTrack(this._playlistService.currentTrack()!.url);
+    this.playlistService.playNext();
+    this.setupNewTrack(this.playlistService.currentTrack()!.url);
     await this.playAudio();
   }
 
   public async playPrevious() {
-    this._playlistService.playPrevious();
-    this.setupNewTrack(this._playlistService.currentTrack()!.url);
+    this.playlistService.playPrevious();
+    this.setupNewTrack(this.playlistService.currentTrack()!.url);
     await this.playAudio();
   }
 
   public async playByNumber(num: number) {
-    this._playlistService.playByNumber(num);
-    this.setupNewTrack(this._playlistService.currentTrack()!.url);
+    this.playlistService.playByNumber(num);
+    this.setupNewTrack(this.playlistService.currentTrack()!.url);
     await this.playAudio();
   }
 
   public async playRandom() {
-    this._playlistService.playRandom();
-    this.setupNewTrack(this._playlistService.currentTrack()!.url);
+    this.playlistService.playRandom();
+    this.setupNewTrack(this.playlistService.currentTrack()!.url);
     await this.playAudio();
+  }
+
+  public switchRepeatMode() {
+    this._repeatMode.set((this._repeatMode() + 1) % (Object.keys(PlaybackRepeatMode).length / 2));
+  }
+
+  public switchShuffleMode() {
+    this._shuffleMode.set(
+      (this._shuffleMode() + 1) % (Object.keys(PlaybackShuffleMode).length / 2),
+    );
   }
 }

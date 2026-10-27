@@ -56,12 +56,11 @@ export class PlayerControlsBar implements OnInit {
   }
 
   protected switchRepeatMode() {
-    this.playbackService.repeatMode =
-      (this.playbackService.repeatMode + 1) % (Object.keys(PlaybackRepeatMode).length / 2);
+    this.playbackService.switchRepeatMode();
   }
 
   private setRepeatIcon() {
-    switch (this.playbackService.repeatMode) {
+    switch (this.playbackService.repeatMode()) {
       case PlaybackRepeatMode.None:
         return 'fa-repeat disabled-icon';
       case PlaybackRepeatMode.RepeatCategory:
@@ -72,12 +71,11 @@ export class PlayerControlsBar implements OnInit {
   }
 
   protected switchShuffleMode() {
-    this.playbackService.shuffleMode =
-      (this.playbackService.shuffleMode + 1) % (Object.keys(PlaybackShuffleMode).length / 2);
+    this.playbackService.switchShuffleMode();
   }
 
   private setShuffleIcon() {
-    switch (this.playbackService.shuffleMode) {
+    switch (this.playbackService.shuffleMode()) {
       case PlaybackShuffleMode.None:
         return 'fa-random disabled-icon';
       case PlaybackShuffleMode.ShuffleAll:

@@ -30,18 +30,15 @@ export class PlaylistService {
   private readonly _currentPlaylist = signal<Array<Track>>([]);
   public readonly currentPlaylist = this._currentPlaylist.asReadonly();
 
-  private readonly _currentTrack: WritableSignal<Track | undefined>;
+  private readonly _currentTrack: WritableSignal<Track | undefined> = signal(undefined);
 
-  public readonly currentTrack;
+  public readonly currentTrack = this._currentTrack.asReadonly();
 
-  public currentTrackNum = 0;
+  public readonly currentTrackNum = signal(0);
 
   public readonly ready: Promise<void>;
 
   constructor() {
-    this._currentTrack = signal(undefined);
-    this.currentTrack = this._currentTrack.asReadonly();
-
     this.ready = this.createPlaylist();
   }
 
@@ -71,7 +68,14 @@ export class PlaylistService {
     }
     this._currentPlaylist.set(playlist);
 
-    this._currentTrack.set(this._currentPlaylist()[this.currentTrackNum]);
+    this._currentTrack.set(this._currentPlaylist()[0]);
+  }
+
+  private async loadTrackMetadata(t: string) {
+    const track = await fetch(t);
+    const blob = await track.blob();
+
+    return await parseBlob(blob);
   }
 
   private uint8ArrayToBase64(data: Uint8Array): string {
@@ -84,25 +88,25 @@ export class PlaylistService {
     return btoa(binary);
   }
 
-  private async loadTrackMetadata(t: string) {
-    const track = await fetch(t);
-    const blob = await track.blob();
-
-    return await parseBlob(blob);
+  private setupNextTrack(trackNum: number) {
+    this.currentTrackNum.set(trackNum);
+    this._currentTrack.set(this._currentPlaylist()[trackNum]);
   }
 
   public playNext() {
-    this.currentTrackNum =
-      (this.currentTrackNum + 1 + this._currentPlaylist().length) % this._currentPlaylist().length;
+    const num =
+      (this.currentTrackNum() + 1 + this._currentPlaylist().length) %
+      this._currentPlaylist().length;
 
-    this._currentTrack.set(this._currentPlaylist()[this.currentTrackNum]);
+    this.setupNextTrack(num);
   }
 
   public playPrevious() {
-    this.currentTrackNum =
-      (this.currentTrackNum - 1 + this._currentPlaylist().length) % this._currentPlaylist().length;
+    const num =
+      (this.currentTrackNum() - 1 + this._currentPlaylist().length) %
+      this._currentPlaylist().length;
 
-    this._currentTrack.set(this._currentPlaylist()[this.currentTrackNum]);
+    this.setupNextTrack(num);
   }
 
   public playByNumber(num: number) {
@@ -111,16 +115,12 @@ export class PlaylistService {
       return;
     }
 
-    this.currentTrackNum = num;
-
-    this._currentTrack.set(this._currentPlaylist()[this.currentTrackNum]);
+    this.setupNextTrack(num);
   }
 
   public playRandom() {
     const num = Math.floor(Math.random() * this._currentPlaylist().length);
 
-    this.currentTrackNum = num;
-
-    this._currentTrack.set(this._currentPlaylist()[this.currentTrackNum]);
+    this.setupNextTrack(num);
   }
 }
