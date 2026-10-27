@@ -1,7 +1,7 @@
 <div class="player-controls-bar">
-  @if (showTwilightBar()) {
+  <div class="twilight-bar-section" [class.open]="showTwilightBar()">
     <tw-twilight-bar />
-  }
+  </div>
   <tw-playback-progress-bar />
   <div class="player-controls">
     <div class="player-controls-start">

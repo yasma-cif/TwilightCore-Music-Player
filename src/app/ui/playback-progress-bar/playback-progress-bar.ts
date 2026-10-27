@@ -16,23 +16,24 @@ export class PlaybackProgressBar implements OnInit {
   protected readonly showThumb = signal(false);
   protected readonly progressBarExpanded = signal(false);
   protected readonly isGrabbing = signal(false);
+  protected readonly isSeeking = signal(false);
 
   protected isPointerDown = false;
-  protected isSeeking = false;
 
   ngOnInit() {
-    this.playbackService.timeUpdate$.subscribe(() => this.setPlaybackBarProgress());
+    this.playbackService.timeUpdate$.subscribe(() => this.updatePlaybackBarProgress());
   }
 
-  private setPlaybackBarProgress() {
-    if (!this.isSeeking) {
+  private updatePlaybackBarProgress() {
+    if (!this.isSeeking()) {
       this.progressBarValue.set(this.playbackService.progressPercentage);
     }
   }
 
-  private async seekByPercentage(pos: number) {
+  private async seek(pos: number) {
     const barWidth = this.progressBarRef().nativeElement.offsetWidth;
-    this.playbackService.progressPercentage = (pos / barWidth) * 100;
+
+    this.playbackService.seekByPercentage((pos / barWidth) * 100);
 
     if (!this.playbackService.isPlaying()) {
       await this.playbackService.playAudio();
@@ -51,12 +52,13 @@ export class PlaybackProgressBar implements OnInit {
 
     (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
 
-    const position = this.calculatePointerPosition(ev);
+    const newPosition = this.calculatePointerPosition(ev);
 
     const currentPosition =
       (this.progressBarRef().nativeElement.offsetWidth * this.progressBarValue()) / 100;
-    if (Math.abs(position - currentPosition) > 14) {
-      await this.seekByPercentage(position);
+
+    if (Math.abs(newPosition - currentPosition) > 14) {
+      await this.seek(newPosition);
 
       if (!this.playbackService.isPlaying()) {
         await this.playbackService.playAudio();
@@ -65,18 +67,18 @@ export class PlaybackProgressBar implements OnInit {
   }
 
   protected async onPointerUp(ev: PointerEvent) {
-    if (this.isSeeking) {
-      await this.seekByPercentage(this.calculatePointerPosition(ev));
+    if (this.isSeeking()) {
+      await this.seek(this.calculatePointerPosition(ev));
     }
 
     this.isPointerDown = false;
-    this.isSeeking = false;
+    this.isSeeking.set(false);
     this.isGrabbing.set(false);
   }
 
   protected async onPointerMove(ev: PointerEvent) {
     if (this.isPointerDown) {
-      this.isSeeking = true;
+      this.isSeeking.set(true);
       const barWidth = this.progressBarRef().nativeElement.offsetWidth;
       this.progressBarValue.set((ev.pageX / barWidth) * 100);
     }

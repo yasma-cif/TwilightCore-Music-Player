@@ -35,7 +35,7 @@ export class PlayerControlsBar implements OnInit {
   }
 
   private setTrackProgress() {
-    this.trackProgress.set(this.playbackService.progress * 1000);
+    this.trackProgress.set(this.playbackService.progressSeconds * 1000);
     this.trackDuration.set(this.playbackService.duration * 1000);
   }
 

@@ -9,6 +9,7 @@
   width: 0;
   opacity: 0;
   overflow: hidden auto;
+  visibility: hidden;
 
   transition:
     width 200ms ease,
@@ -17,5 +18,6 @@
   &.open {
     width: clamp(12rem, 36vw, 30rem);
     opacity: 1;
+    visibility: visible;
   }
 }

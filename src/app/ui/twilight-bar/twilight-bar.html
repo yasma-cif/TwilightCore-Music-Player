@@ -1,38 +1,36 @@
-<div class="twilight-bar-section">
-  <div class="twilight-bar-parent">
-    <div
-      #twilightBar
-      class="twilight-bar"
+<div class="twilight-bar-container">
+  <div
+    #twilightBar
+    class="twilight-bar"
+    [class.grabbing]="isGrabbing()"
+    (pointerdown)="onPointerDown($event)"
+    (pointerup)="onPointerUp($event)"
+    (pointermove)="onPointerMove($event)"
+  >
+    <svg class="curve" viewBox="0 0 300 140" aria-hidden="true">
+      <defs>
+        <linearGradient
+          id="curve-gradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="0%"
+          color-interpolation="oklch"
+        >
+          <stop offset="0%" stop-color="oklch(0.824 0.101 52.629)" />
+          <stop offset="100%" stop-color="oklch(0.787 0.119 304.769)" />
+        </linearGradient>
+      </defs>
+      <path d="M16,120 C80,20 220,20 284,120" />
+    </svg>
+    <div class="centered-line"></div>
+    <i
+      class="twilight-bar-thumb"
       [class.grabbing]="isGrabbing()"
-      (pointerdown)="onPointerDown($event)"
-      (pointerup)="onPointerUp($event)"
-      (pointermove)="onPointerMove($event)"
+      [style.offset-distance.%]="thumbPosition()"
+      [style.--icon]="'url(' + thumbIcon() + ')'"
     >
-      <svg class="curve" viewBox="0 0 300 140" aria-hidden="true">
-        <defs>
-          <linearGradient
-            id="curve-gradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="0%"
-            color-interpolation="oklch"
-          >
-            <stop offset="0%" stop-color="oklch(0.824 0.101 52.629)" />
-            <stop offset="100%" stop-color="oklch(0.787 0.119 304.769)" />
-          </linearGradient>
-        </defs>
-        <path d="M16,120 C80,20 220,20 284,120" />
-      </svg>
-      <div class="centered-line"></div>
-      <i
-        class="twilight-bar-thumb"
-        [class.grabbing]="isGrabbing()"
-        [style.offset-distance.%]="thumbPosition()"
-        [style.--icon]="'url(' + thumbIcon() + ')'"
-      >
-      </i>
-    </div>
-    <p class="twilight-value">x{{ twilightBarValue() | number: '.2' }}</p>
+    </i>
   </div>
+  <p class="twilight-value">x{{ twilightBarValue() | number: '.2' }}</p>
 </div>

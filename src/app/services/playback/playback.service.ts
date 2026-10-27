@@ -48,16 +48,12 @@ export class PlaybackService {
     return this.audioElement.duration;
   }
 
-  public get progress(): number {
+  public get progressSeconds(): number {
     return this.audioElement.currentTime;
   }
 
   public get progressPercentage(): number {
     return (this.audioElement.currentTime / this.audioElement.duration) * 100;
-  }
-
-  public set progressPercentage(percent: number) {
-    this.audioElement.currentTime = (percent * this.audioElement.duration) / 100;
   }
 
   public constructor() {
@@ -107,7 +103,7 @@ export class PlaybackService {
     switch (this._repeatMode()) {
       case PlaybackRepeatMode.None:
         this.isPlaying.set(false);
-        this.progressPercentage = 0;
+        this.seekByPercentage(0);
         break;
       case PlaybackRepeatMode.RepeatCategory:
         if (this._shuffleMode() === PlaybackShuffleMode.None) {
@@ -144,6 +140,10 @@ export class PlaybackService {
     this.playlistService.playRandom();
     this.setupNewTrack(this.playlistService.currentTrack()!.url);
     await this.playAudio();
+  }
+
+  public seekByPercentage(percent: number) {
+    this.audioElement.currentTime = (percent * this.audioElement.duration) / 100;
   }
 
   public switchRepeatMode() {
