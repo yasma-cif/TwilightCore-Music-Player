@@ -1,35 +1,14 @@
 .track-item {
   display: flex;
-  height: 6vh;
-  min-height: 70px;
+  height: 4.5rem;
   width: 100%;
-  min-width: 100%;
   align-items: center;
   background-color: var(--color-crust);
   border: 3px solid var(--color-primary);
   cursor: pointer;
   border-radius: 20px;
-  font-size: 0.7em;
   color: var(--color-text);
-}
-
-.track-number {
-  margin-left: 10px;
-}
-
-.track-item-info {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-left: 16px;
-}
-
-.track-item-duration {
-  margin-left: auto;
-  margin-right: 1em;
+  padding: 0 1.1rem;
 }
 
 .track-item:hover {
@@ -43,7 +22,27 @@
 }
 
 :host(.playing) .track-item:hover {
-  filter: brightness(100%);
+  filter: brightness(125%);
+}
+
+.track-number {
+  font-size: 1rem;
+}
+
+.track-item-info {
+  display: flex;
+  font-size: 1.1rem;
+  flex-direction: column;
+  align-items: start;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 16px;
+}
+
+.track-item-duration {
+  font-size: 1rem;
+  margin-left: auto;
 }
 
 .cover-art {

@@ -4,13 +4,12 @@
   justify-content: center;
   background-color: var(--color-crust);
   height: 210px;
-  width: 450px;
+  width: 480px;
   border-top-left-radius: 225px;
   border-top-right-radius: 225px;
 }
 
 .twilight-bar {
-  position: relative;
   width: 300px;
   height: 140px;
   transform: scale(1.5);
@@ -45,7 +44,6 @@
   color: var(--color-crust);
   font-size: 24px;
   offset-path: path('M16,120 C80,20 220,20 284,120');
-  offset-rotate: auto;
   offset-distance: 0%;
   offset-anchor: center;
   pointer-events: auto;
@@ -71,8 +69,9 @@
 
 .twilight-value {
   position: absolute;
-  bottom: 10px;
-  font-size: 0.8em;
+  bottom: 0;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
 }
 
 .centered-line {

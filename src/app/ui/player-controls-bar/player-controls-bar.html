@@ -1,18 +1,18 @@
-<div class="player-controls-bar">
+<div class="player-controls-bar-container">
   <div class="twilight-bar-section" [class.open]="showTwilightBar()">
     <tw-twilight-bar />
   </div>
   <tw-playback-progress-bar />
-  <div class="player-controls">
+  <div class="player-controls-bar">
     <div class="player-controls-start">
       <button class="player-controls-button" (click)="sideMenuState.toggleSideMenu()">
         <i class="fas fa-bars" [class.disabled-icon]="!sideMenuState.isOpen()"></i>
       </button>
       <button class="player-controls-button" (click)="switchRepeatMode()">
-        <i class="fas fad" [class]="repeatIcon()"></i>
+        <i class="fas" [class]="repeatIcon()"></i>
       </button>
       <button class="player-controls-button" (click)="switchShuffleMode()">
-        <i class="fas fa-random" [class]="shuffleIcon()"></i>
+        <i class="fas" [class]="shuffleIcon()"></i>
       </button>
     </div>
 
@@ -21,7 +21,7 @@
         <i class="fas fa-backward-step"></i>
       </button>
       <button class="player-controls-button play-button" (click)="playAudio()">
-        @if (isPlaying()) {
+        @if (this.playbackService.isPlaying()) {
           <i class="fas fa-pause"></i>
         } @else {
           <i class="fas fa-play"></i>

@@ -11,9 +11,9 @@ body {
 }
 
 :root {
-  font-size: 2rem;
-  --top-bar-height: 2.2rem;
-  --player-controls-bar-height: 2.2rem;
+  font-size: 1rem;
+  --top-bar-height: 4rem;
+  --player-controls-bar-height: 4rem;
 
   /* Theming */
 

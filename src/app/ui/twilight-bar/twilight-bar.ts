@@ -24,22 +24,22 @@ export class TwilightBar implements OnInit {
   private readonly twilightBarRef =
     viewChild.required<ElementRef<HTMLCanvasElement>>('twilightBar');
 
-  protected readonly twilightBarValue = signal(1);
-  protected readonly thumbPosition = signal(0);
+  protected readonly twilightValue = signal(1);
+  protected readonly thumbPositionPercent = signal(0);
   protected readonly thumbIcon: Signal<string>;
   protected readonly isGrabbing = signal(false);
+  protected readonly isSeeking = signal(false);
 
   protected isPointerDown = false;
-  protected isSeeking = false;
 
-  protected twilightValueMin = 0.25;
-  protected twilightValueMax = 2.5;
+  protected TWILIGHT_VALUE_MIN = 0.25;
+  protected TWILIGHT_VALUE_MAX = 2.5;
 
   constructor() {
     this.thumbIcon = computed(() => {
-      if (this.twilightBarValue() > 1) {
+      if (this.twilightValue() > 1) {
         return 'icons/moon.svg';
-      } else if (this.twilightBarValue() < 1) {
+      } else if (this.twilightValue() < 1) {
         return 'icons/sun.svg';
       } else {
         return 'icons/twilight.svg';
@@ -48,24 +48,23 @@ export class TwilightBar implements OnInit {
   }
 
   ngOnInit() {
-    this.thumbPosition.set(50);
-
-    this.twilightBarValue.set(this.playbackService.playbackRate);
+    this.thumbPositionPercent.set(50);
+    this.twilightValue.set(this.playbackService.playbackRate);
   }
 
   private async setTwilightValue(pos: number) {
-    const valInRange =
+    // Sets 1.0 as the center of the bar
+    const twilightVal =
       pos <= 0.5
-        ? MathUtils.lerp(this.twilightValueMin, 1, pos * 2)
-        : MathUtils.lerp(1, this.twilightValueMax, (pos - 0.5) * 2);
+        ? MathUtils.lerp(this.TWILIGHT_VALUE_MIN, 1.0, pos * 2)
+        : MathUtils.lerp(1.0, this.TWILIGHT_VALUE_MAX, (pos - 0.5) * 2);
 
-    const trimmedValInRange = Number(valInRange.toFixed(2));
+    const newThumbPos = MathUtils.lerp(0, 100, pos);
+    this.thumbPositionPercent.set(newThumbPos);
 
-    const thumbVal = MathUtils.lerp(0, 100, pos);
-    this.thumbPosition.set(thumbVal);
-
-    this.playbackService.playbackRate = trimmedValInRange;
-    this.twilightBarValue.set(trimmedValInRange);
+    const truncatedTwilightVal = Number(twilightVal.toFixed(2));
+    this.playbackService.playbackRate = truncatedTwilightVal;
+    this.twilightValue.set(truncatedTwilightVal);
   }
 
   private calculatePointerPosition(ev: PointerEvent) {
@@ -73,9 +72,7 @@ export class TwilightBar implements OnInit {
 
     const position = Math.max(0, Math.min(ev.clientX - rect.left, rect.width));
 
-    const normalizedPosition = MathUtils.inverseLerp(0, rect.width, position);
-
-    return normalizedPosition;
+    return MathUtils.inverseLerp(0, rect.width, position);
   }
 
   protected async onPointerDown(ev: PointerEvent) {
@@ -84,10 +81,10 @@ export class TwilightBar implements OnInit {
 
     (ev.currentTarget as HTMLElement).setPointerCapture(ev.pointerId);
 
-    const position = this.calculatePointerPosition(ev);
+    const newPosition = this.calculatePointerPosition(ev);
 
-    if (Math.abs(position - this.thumbPosition() / 100) > 0.05) {
-      await this.setTwilightValue(position);
+    if (Math.abs(newPosition - this.thumbPositionPercent() / 100) > 0.05) {
+      await this.setTwilightValue(newPosition);
 
       if (!this.playbackService.isPlaying()) {
         await this.playbackService.playAudio();
@@ -97,18 +94,18 @@ export class TwilightBar implements OnInit {
 
   protected async onPointerUp(ev: PointerEvent) {
     const center = 0.5;
-    const position = this.calculatePointerPosition(ev);
+    const newPosition = this.calculatePointerPosition(ev);
 
-    if (Math.abs(position - this.thumbPosition() / 100) > 0.05 && this.isSeeking) {
-      if (Math.abs(position - center) < 0.01) {
+    if (Math.abs(newPosition - this.thumbPositionPercent() / 100) > 0.05 && this.isSeeking()) {
+      if (Math.abs(newPosition - center) < 0.01) {
         await this.setTwilightValue(center);
       } else {
-        await this.setTwilightValue(position);
+        await this.setTwilightValue(newPosition);
       }
     }
 
     this.isPointerDown = false;
-    this.isSeeking = false;
+    this.isSeeking.set(false);
     this.isGrabbing.set(false);
   }
 
@@ -117,15 +114,15 @@ export class TwilightBar implements OnInit {
       return;
     }
 
-    this.isSeeking = true;
+    this.isSeeking.set(true);
 
     const center = 0.5;
-    const position = this.calculatePointerPosition(ev);
+    const newPosition = this.calculatePointerPosition(ev);
 
-    if (Math.abs(position - center) < 0.01) {
+    if (Math.abs(newPosition - center) < 0.01) {
       await this.setTwilightValue(center);
     } else {
-      await this.setTwilightValue(position);
+      await this.setTwilightValue(newPosition);
     }
   }
 }

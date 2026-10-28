@@ -1,15 +1,12 @@
 .track-menu {
   display: flex;
-  width: 100%;
   background-color: var(--color-crust);
-  align-items: center;
 }
 
 .track-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  width: 100%;
-  gap: 0.2em;
+  gap: 0.3rem;
   margin: 0 6px;
-  padding-bottom: 10px;
+  padding-bottom: 0.5rem;
 }

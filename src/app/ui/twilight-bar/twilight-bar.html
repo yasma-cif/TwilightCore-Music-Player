@@ -27,10 +27,10 @@
     <i
       class="twilight-bar-thumb"
       [class.grabbing]="isGrabbing()"
-      [style.offset-distance.%]="thumbPosition()"
+      [style.offset-distance.%]="thumbPositionPercent()"
       [style.--icon]="'url(' + thumbIcon() + ')'"
     >
     </i>
   </div>
-  <p class="twilight-value">x{{ twilightBarValue() | number: '.2' }}</p>
+  <p class="twilight-value">x{{ twilightValue() | number: '.2' }}</p>
 </div>

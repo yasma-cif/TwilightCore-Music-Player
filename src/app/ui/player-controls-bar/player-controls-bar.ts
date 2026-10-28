@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal, Signal, OnInit } from '@angular/core';
+import { Component, computed, inject, signal, OnInit } from '@angular/core';
 import { PlaybackProgressBar } from '../playback-progress-bar/playback-progress-bar';
 import { PlaybackService } from '../../services/playback/playback.service';
 import { TwilightBar } from '../twilight-bar/twilight-bar';
@@ -17,7 +17,6 @@ export class PlayerControlsBar implements OnInit {
   protected readonly playbackService = inject(PlaybackService);
   protected readonly sideMenuState = inject(TrackMenuStateService);
 
-  protected readonly isPlaying: Signal<boolean>;
   protected readonly showTwilightBar = signal(true);
 
   protected readonly repeatIcon = computed(() => this.setRepeatIcon());
@@ -26,15 +25,11 @@ export class PlayerControlsBar implements OnInit {
   protected readonly trackProgress = signal(0);
   protected readonly trackDuration = signal(0);
 
-  constructor() {
-    this.isPlaying = this.playbackService.isPlaying;
-  }
-
   ngOnInit() {
-    this.playbackService.timeUpdate$.subscribe(() => this.setTrackProgress());
+    this.playbackService.timeUpdate$.subscribe(() => this.setTimeLabels());
   }
 
-  private setTrackProgress() {
+  private setTimeLabels() {
     this.trackProgress.set(this.playbackService.progressSeconds * 1000);
     this.trackDuration.set(this.playbackService.duration * 1000);
   }

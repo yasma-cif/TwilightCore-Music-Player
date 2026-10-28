@@ -16,7 +16,7 @@
     opacity 200ms ease;
 
   &.open {
-    width: clamp(12rem, 36vw, 30rem);
+    width: clamp(24rem, 36vw, 54rem);
     opacity: 1;
     visibility: visible;
   }
