@@ -8,6 +8,7 @@
   border-top-left-radius: 225px;
   border-top-right-radius: 225px;
   border: solid 3px var(--color-secondary);
+  border-bottom: transparent;
 }
 
 .twilight-bar {

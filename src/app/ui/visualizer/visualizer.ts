@@ -93,9 +93,9 @@ export class Visualizer implements OnDestroy {
   private onPeak(val: [Array<number>, Array<number>]) {
     this.audioData.set(val[0]);
     gsap.to(this.cube.scale, {
-      x: 1 + MathUtils.lerp(0, 2, val[1][0]),
-      y: 1 + MathUtils.lerp(0, 6, val[1][1]),
-      z: 1 + MathUtils.lerp(0, 2, val[1][0]),
+      x: 1 + MathUtils.lerp(0, 1, val[1][0]),
+      y: 1 + MathUtils.lerp(0, 3, val[1][1]),
+      z: 1 + MathUtils.lerp(0, 1, val[1][0]),
       duration: 0.1,
     });
 
@@ -135,8 +135,8 @@ export class Visualizer implements OnDestroy {
 
   private animate = (time: number) => {
     if (this.playbackService.isPlaying()) {
-      this.cube.rotation.x = (time / 8000) * this.playbackService.playbackRate;
-      this.cube.rotation.y = (time / 4000) * this.playbackService.playbackRate;
+      this.cube.rotation.x = (time / 10000) * this.playbackService.playbackRate;
+      this.cube.rotation.y = (time / 5000) * this.playbackService.playbackRate;
     }
     this.onResize();
     this.renderer.render(this.scene, this.camera);

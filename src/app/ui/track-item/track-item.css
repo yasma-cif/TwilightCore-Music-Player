@@ -4,7 +4,7 @@
   width: 100%;
   align-items: center;
   background-color: var(--color-crust);
-  border: 3px solid var(--color-primary);
+  border: 3px solid var(--color-secondary);
   cursor: pointer;
   border-radius: 20px;
   color: var(--color-text);
