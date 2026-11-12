@@ -19,6 +19,9 @@ export class PlaybackService {
   private readonly _shuffleMode = signal(PlaybackShuffleMode.None);
   public readonly shuffleMode = this._shuffleMode.asReadonly();
 
+  private readonly _currentVolume = signal(1);
+  public readonly currentVolume = this._currentVolume.asReadonly();
+
   private readonly playbackEventSubject = new Subject<PlaybackEvent>();
   public readonly playbackEvent$: Observable<PlaybackEvent> =
     this.playbackEventSubject.asObservable();
@@ -54,6 +57,14 @@ export class PlaybackService {
 
   public get progressPercentage(): number {
     return (this.audioElement.currentTime / this.audioElement.duration) * 100;
+  }
+
+  public set volume(val: number) {
+    if (val < 0 || val > 1) {
+      return;
+    }
+    this._currentVolume.set(val);
+    this.audioElement.volume = val;
   }
 
   public constructor() {

@@ -74,6 +74,26 @@
   color: var(--color-disabled);
 }
 
+.volume-section {
+  display: flex;
+  align-items: center;
+
+  .volume-slider-section {
+    width: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: width 200ms ease;
+  }
+
+  &:hover {
+    .volume-slider-section {
+      width: 150px;
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
 .twilight-icon {
   position: absolute;
   display: flex;

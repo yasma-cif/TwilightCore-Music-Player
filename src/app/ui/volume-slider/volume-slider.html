@@ -1,0 +1,23 @@
+<div
+  class="volume-slider-container"
+  [class.grabbing]="isGrabbing()"
+  (pointerdown)="onPointerDown($event)"
+  (pointerup)="onPointerUp($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerenter)="onPointerEnter()"
+  (pointerleave)="onPointerLeave()"
+>
+  <div #volumeSlider class="volume-slider">
+    <div
+      class="volume-slider-fill"
+      [style.width.%]="volumeValuePercentage()"
+      [class.expanded]="volumeSliderExpanded()"
+    >
+      <i
+        class="volume-slider-thumb fas fa-circle"
+        [class.expanded]="showThumb()"
+        [class.grabbing]="isGrabbing()"
+      ></i>
+    </div>
+  </div>
+</div>

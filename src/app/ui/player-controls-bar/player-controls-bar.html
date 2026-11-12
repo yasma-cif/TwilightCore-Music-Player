@@ -41,9 +41,14 @@
           </p>
         }
       </div>
-      <button class="player-controls-button">
-        <i class="fas fa-volume disabled-icon"></i>
-      </button>
+      <div class="volume-section">
+        <button class="player-controls-button" (click)="toggleVolumeSlider()">
+          <i class="fas fa-volume"></i>
+        </button>
+        <div class="volume-slider-section" [class.open]="showVolumeSlider()">
+          <tw-volume-slider />
+        </div>
+      </div>
       <button class="player-controls-button" (click)="toggleTwilightBar()">
         <i
           class="twilight-icon"

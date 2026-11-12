@@ -6,9 +6,10 @@ import { PlaybackRepeatMode } from '../../services/playback/playback-repeat-mode
 import { TrackMenuStateService } from '../../services/track-menu-state/track-menu-state';
 import { DatePipe } from '@angular/common';
 import { PlaybackShuffleMode } from '../../services/playback/playback-shuffle-mode';
+import { VolumeSlider } from '../volume-slider/volume-slider';
 
 @Component({
-  imports: [PlaybackProgressBar, TwilightBar, DatePipe],
+  imports: [PlaybackProgressBar, TwilightBar, DatePipe, VolumeSlider],
   selector: 'tw-player-controls-bar',
   styleUrl: './player-controls-bar.css',
   templateUrl: './player-controls-bar.html',
@@ -18,6 +19,7 @@ export class PlayerControlsBar implements OnInit {
   protected readonly sideMenuState = inject(TrackMenuStateService);
 
   protected readonly showTwilightBar = signal(true);
+  protected readonly showVolumeSlider = signal(false);
 
   protected readonly repeatIcon = computed(() => this.setRepeatIcon());
   protected readonly shuffleIcon = computed(() => this.setShuffleIcon());
@@ -48,6 +50,10 @@ export class PlayerControlsBar implements OnInit {
 
   protected toggleTwilightBar() {
     this.showTwilightBar.set(!this.showTwilightBar());
+  }
+
+  protected toggleVolumeSlider() {
+    this.showVolumeSlider.set(!this.showVolumeSlider());
   }
 
   protected switchRepeatMode() {
