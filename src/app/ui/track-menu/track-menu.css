@@ -8,5 +8,6 @@
   grid-template-columns: minmax(0, 1fr);
   gap: 0.3rem;
   margin: 0 6px;
+  padding-top: 0.5rem;
   padding-bottom: 0.5rem;
 }

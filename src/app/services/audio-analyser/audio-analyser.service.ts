@@ -11,9 +11,10 @@ export class AudioAnalyserService {
   private readonly analyser: AnalyserNode;
   private readonly source: MediaElementAudioSourceNode;
 
-  private readonly peakSubject = new Subject<Array<number>>();
+  private readonly peakSubject = new Subject<[Array<number>, Array<number>]>();
 
-  public readonly peak$: Observable<Array<number>> = this.peakSubject.asObservable();
+  public readonly peak$: Observable<[Array<number>, Array<number>]> =
+    this.peakSubject.asObservable();
 
   constructor() {
     this.audioCtx = new AudioContext();
@@ -64,7 +65,7 @@ export class AudioAnalyserService {
 
       const newVector = new Array<number>(lowsAverage, midsAverage, highsAverage);
 
-      this.peakSubject.next(newVector);
+      this.peakSubject.next([Array.from(trimmedArray), newVector]);
 
       requestAnimationFrame(analyse);
     };

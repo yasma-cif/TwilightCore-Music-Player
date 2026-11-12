@@ -16,6 +16,7 @@ export class PlaylistService {
     '/music/other_tests/aerosurf.mp3',
     '/music/other_tests/sbbb main.mp3',
     '/music/other_tests/sbbb menu.mp3',
+    '/music/other_tests/fd.mp3',
     '/music/other_tests/td.mp3',
     '/music/other_tests/bt.mp3',
     '/music/other_tests/c ruins.mp3',
