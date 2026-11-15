@@ -42,8 +42,8 @@
         }
       </div>
       <div class="volume-section">
-        <button class="player-controls-button" (click)="toggleVolumeSlider()">
-          <i class="fas fa-volume"></i>
+        <button class="player-controls-button" (click)="toggleMuteVolume()">
+          <i class="fas volume-icon" [class]="volumeIcon()"></i>
         </button>
         <div class="volume-slider-section" [class.open]="showVolumeSlider()">
           <tw-volume-slider />

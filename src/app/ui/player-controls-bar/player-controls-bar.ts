@@ -23,9 +23,12 @@ export class PlayerControlsBar implements OnInit {
 
   protected readonly repeatIcon = computed(() => this.setRepeatIcon());
   protected readonly shuffleIcon = computed(() => this.setShuffleIcon());
+  protected readonly volumeIcon = computed(() => this.setVolumeIcon());
 
   protected readonly trackProgress = signal(0);
   protected readonly trackDuration = signal(0);
+
+  private lastVolumeValue = 1;
 
   ngOnInit() {
     this.playbackService.timeUpdate$.subscribe(() => this.setTimeLabels());
@@ -52,8 +55,31 @@ export class PlayerControlsBar implements OnInit {
     this.showTwilightBar.set(!this.showTwilightBar());
   }
 
-  protected toggleVolumeSlider() {
-    this.showVolumeSlider.set(!this.showVolumeSlider());
+  protected toggleMuteVolume() {
+    if (this.playbackService.currentVolume() > 0) {
+      this.lastVolumeValue = this.playbackService.currentVolume();
+      this.playbackService.volume = 0;
+    } else {
+      this.playbackService.volume = this.lastVolumeValue;
+    }
+  }
+
+  private setVolumeIcon() {
+    if (this.playbackService.currentVolume() >= 0.5) {
+      return 'fa-volume-high';
+    } else if (
+      this.playbackService.currentVolume() >= 0.25 &&
+      this.playbackService.currentVolume() < 0.5
+    ) {
+      return 'fa-volume';
+    } else if (
+      this.playbackService.currentVolume() > 0 &&
+      this.playbackService.currentVolume() < 0.25
+    ) {
+      return 'fa-volume-low';
+    } else {
+      return 'fa-volume-xmark';
+    }
   }
 
   protected switchRepeatMode() {
