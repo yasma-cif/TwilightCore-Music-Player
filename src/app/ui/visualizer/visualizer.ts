@@ -70,11 +70,15 @@ export class Visualizer implements OnDestroy {
 
     const geometry = new THREE.SphereGeometry(this.sphereRadius, 64, 256);
 
-    this.sphere = new THREE.Mesh(geometry, this.setupMaterial(new THREE.MeshBasicMaterial()));
-    this.sphere.setRotationFromEuler(new THREE.Euler(0, 1, 4, 'XYZ'));
+    this.sphere = new THREE.Mesh(geometry, this.setupMaterial());
+    //this.sphere.setRotationFromEuler(new THREE.Euler(0, 1, 4, 'XYZ'));
+    this.sphere.setRotationFromEuler(new THREE.Euler(0, 0, THREE.MathUtils.degToRad(90), 'XYZ'));
     this.scene.add(this.sphere);
 
-    this.setupGradient();
+    const ambient = new THREE.AmbientLight(0xffffff, 1.0);
+    const directional = new THREE.DirectionalLight(0xffffff, 2.2);
+    directional.position.set(3, 4, 5);
+    this.scene.add(ambient, directional);
 
     this.audioTexture = new THREE.DataTexture(
       this.audioData,
@@ -104,8 +108,17 @@ export class Visualizer implements OnDestroy {
     this.audioTexture.needsUpdate = true;
   }
 
-  private setupMaterial<T extends THREE.Material>(material: T): T {
-    material.onBeforeCompile = (shader) => {
+  private setupMaterial() {
+    this.textureCanvas = document.createElement('canvas');
+    this.textureCanvas.width = 1;
+    this.textureCanvas.height = 256;
+
+    this.gradientTexture = new THREE.CanvasTexture(this.textureCanvas);
+    this.gradientTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const newMaterial = new THREE.MeshLambertMaterial({ map: this.gradientTexture });
+
+    newMaterial.onBeforeCompile = (shader) => {
       shader.uniforms['uAudioTexture'] = { value: this.audioTexture };
       shader.uniforms['uDisplacementAmount'] = { value: 0.8 };
       shader.uniforms['uRadius'] = { value: this.sphereRadius };
@@ -132,14 +145,17 @@ export class Visualizer implements OnDestroy {
           transformed += normal * audioHeight(lat);`,
         );
     };
-    return material;
+
+    this.updateGradient();
+
+    return newMaterial;
   }
 
   private animate = (time: number) => {
-    if (this.playbackService.isPlaying()) {
+    /* if (this.playbackService.isPlaying()) {
       this.sphere.rotation.x = (time / 60000) * this.playbackService.playbackRate;
       this.sphere.rotation.y = (time / 3000) * this.playbackService.playbackRate;
-    }
+    } */
     this.onResize();
     this.renderer.render(this.scene, this.camera);
   };
@@ -179,28 +195,20 @@ export class Visualizer implements OnDestroy {
     }
   }
 
-  private setupGradient() {
-    this.textureCanvas = document.createElement('canvas');
-    this.textureCanvas.width = 1;
-    this.textureCanvas.height = 256;
-
-    this.gradientTexture = new THREE.CanvasTexture(this.textureCanvas);
-    this.gradientTexture.colorSpace = THREE.SRGBColorSpace;
-
-    this.sphere.material = this.setupMaterial(
-      new THREE.MeshBasicMaterial({ map: this.gradientTexture }),
-    );
-
-    this.updateGradient();
-  }
-
   private updateGradient() {
     const currentPrimaryColor = getComputedStyle(document.documentElement)
       .getPropertyValue('--color-primary')
       .trim();
 
-    console.log(currentPrimaryColor);
-    const stops = [{ offset: 0.5, color: currentPrimaryColor }];
+    const currentCrustColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-crust')
+      .trim();
+
+    const stops = [
+      { offset: 0, color: '#cdd6f4' },
+      { offset: 0.5, color: currentPrimaryColor },
+      { offset: 1, color: '#cdd6f4' },
+    ];
 
     const ctx = this.textureCanvas.getContext('2d')!;
 

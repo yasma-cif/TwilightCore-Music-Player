@@ -55,6 +55,12 @@ body {
   initial-value: black;
 }
 
+@property --color-crust {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: black;
+}
+
 :root {
   font-size: 1rem;
   --top-bar-height: 4rem;
