@@ -29,9 +29,12 @@ export class Visualizer implements OnDestroy {
   private scene!: THREE.Scene;
   private renderer!: THREE.WebGLRenderer;
   private camera!: THREE.PerspectiveCamera;
-  private cube!: THREE.Mesh;
+  private sphere!: THREE.Mesh;
 
-  private readonly sphereRadius = 0.8;
+  private textureCanvas!: HTMLCanvasElement;
+  private gradientTexture!: THREE.CanvasTexture;
+
+  private readonly sphereRadius = 1;
   private readonly bins = 300;
   private audioData = new Uint8Array(this.bins);
   private audioTexture!: THREE.DataTexture;
@@ -67,9 +70,11 @@ export class Visualizer implements OnDestroy {
 
     const geometry = new THREE.SphereGeometry(this.sphereRadius, 64, 256);
 
-    this.cube = new THREE.Mesh(geometry, this.setupMaterial(new THREE.MeshNormalMaterial()));
-    this.cube.setRotationFromEuler(new THREE.Euler(0, 1, 4, 'XYZ'));
-    this.scene.add(this.cube);
+    this.sphere = new THREE.Mesh(geometry, this.setupMaterial(new THREE.MeshBasicMaterial()));
+    this.sphere.setRotationFromEuler(new THREE.Euler(0, 1, 4, 'XYZ'));
+    this.scene.add(this.sphere);
+
+    this.setupGradient();
 
     this.audioTexture = new THREE.DataTexture(
       this.audioData,
@@ -82,9 +87,6 @@ export class Visualizer implements OnDestroy {
     this.audioTexture.minFilter = THREE.LinearFilter;
     this.audioTexture.needsUpdate = true;
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
-    this.scene.add(ambientLight);
-
     this.renderer.setAnimationLoop(this.animate);
 
     this.audioAnalyserService.peak$.subscribe((val) => this.onPeak(val));
@@ -92,7 +94,7 @@ export class Visualizer implements OnDestroy {
 
   private onPeak(val: [Array<number>, Array<number>]) {
     this.audioData.set(val[0]);
-    gsap.to(this.cube.scale, {
+    gsap.to(this.sphere.scale, {
       x: 1 + MathUtils.lerp(0, 1, val[1][0]),
       y: 1 + MathUtils.lerp(0, 3, val[1][1]),
       z: 1 + MathUtils.lerp(0, 1, val[1][0]),
@@ -135,8 +137,8 @@ export class Visualizer implements OnDestroy {
 
   private animate = (time: number) => {
     if (this.playbackService.isPlaying()) {
-      this.cube.rotation.x = (time / 10000) * this.playbackService.playbackRate;
-      this.cube.rotation.y = (time / 5000) * this.playbackService.playbackRate;
+      this.sphere.rotation.x = (time / 60000) * this.playbackService.playbackRate;
+      this.sphere.rotation.y = (time / 3000) * this.playbackService.playbackRate;
     }
     this.onResize();
     this.renderer.render(this.scene, this.camera);
@@ -159,7 +161,7 @@ export class Visualizer implements OnDestroy {
   }
 
   private onPlaybackEvent(event: PlaybackEvent): void {
-    if (this.playlistService.currentTrack()?.coverArt) {
+    /* if (this.playlistService.currentTrack()?.coverArt) {
       const textureLoader = new THREE.TextureLoader();
 
       textureLoader.load(this.playlistService.currentTrack()?.coverArt ?? '', (texture) => {
@@ -167,7 +169,7 @@ export class Visualizer implements OnDestroy {
       });
     } else {
       this.cube.material = this.setupMaterial(new THREE.MeshNormalMaterial());
-    }
+    } */
 
     switch (event.type) {
       case 'paused':
@@ -177,7 +179,43 @@ export class Visualizer implements OnDestroy {
     }
   }
 
-  private onPlaybackRateChange(val: number): void {}
+  private setupGradient() {
+    this.textureCanvas = document.createElement('canvas');
+    this.textureCanvas.width = 1;
+    this.textureCanvas.height = 256;
+
+    this.gradientTexture = new THREE.CanvasTexture(this.textureCanvas);
+    this.gradientTexture.colorSpace = THREE.SRGBColorSpace;
+
+    this.sphere.material = this.setupMaterial(
+      new THREE.MeshBasicMaterial({ map: this.gradientTexture }),
+    );
+
+    this.updateGradient();
+  }
+
+  private updateGradient() {
+    const currentPrimaryColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-primary')
+      .trim();
+
+    console.log(currentPrimaryColor);
+    const stops = [{ offset: 0.5, color: currentPrimaryColor }];
+
+    const ctx = this.textureCanvas.getContext('2d')!;
+
+    const newGradient = ctx.createLinearGradient(0, 0, 0, 256);
+    stops.forEach((s) => newGradient.addColorStop(s.offset, s.color));
+
+    ctx.fillStyle = newGradient;
+    ctx.fillRect(0, 0, 1, 256);
+
+    this.gradientTexture.needsUpdate = true;
+  }
+
+  private onPlaybackRateChange(val: number): void {
+    this.updateGradient();
+  }
 
   ngOnDestroy() {
     this.renderer.setAnimationLoop(null);

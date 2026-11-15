@@ -49,6 +49,12 @@ body {
   }
 }
 
+@property --color-primary {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: black;
+}
+
 :root {
   font-size: 1rem;
   --top-bar-height: 4rem;
