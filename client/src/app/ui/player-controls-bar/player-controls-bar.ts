@@ -7,6 +7,8 @@ import { TrackMenuStateService } from '../../services/track-menu-state/track-men
 import { DatePipe } from '@angular/common';
 import { PlaybackShuffleMode } from '../../services/playback/playback-shuffle-mode';
 import { VolumeSlider } from '../volume-slider/volume-slider';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   imports: [PlaybackProgressBar, TwilightBar, DatePipe, VolumeSlider],
@@ -17,6 +19,7 @@ import { VolumeSlider } from '../volume-slider/volume-slider';
 export class PlayerControlsBar implements OnInit {
   protected readonly playbackService = inject(PlaybackService);
   protected readonly sideMenuState = inject(TrackMenuStateService);
+  private http = inject(HttpClient);
 
   protected readonly showTwilightBar = signal(true);
   protected readonly showVolumeSlider = signal(false);
@@ -53,6 +56,7 @@ export class PlayerControlsBar implements OnInit {
 
   protected toggleTwilightBar() {
     this.showTwilightBar.set(!this.showTwilightBar());
+    this.http.get(`${environment.apiUrl}/weatherforecast`).subscribe(console.log);
   }
 
   protected toggleMuteVolume() {
